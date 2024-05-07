@@ -7,8 +7,8 @@
             Список событий
         </div>
         <div>
-            <div class="sidebar__error" v-if="error" v-html="error"></div>
-            <div class="sidebar__loading" v-else-if="loading">загрузка...</div>
+            <div class="error" v-if="error" v-html="error"></div>
+            <div class="loading" v-else-if="loading">загрузка...</div>
             <div class="sidebar__list" v-else>
                 <div class="sidebar__error" v-if="data.length === 0">
                     не найдено событий
@@ -94,33 +94,40 @@ export default {
         }
 
         &__list {
-            padding: 10px;
+            border-top: 2px solid #fff;
 
             li {
-                margin: 0 0 20px 0;
-                text-align: start;
-                cursor: pointer;
-                font-size: 20px;
-                position: relative;
-
-                &::after {
-                    content: "";
-                    position: absolute;
-                    bottom: -5px;
-                    left: 0;
-                    width: 0%;
-                    height: 2px;
-                    background: #2c3e50;
-                }
-
-                &:hover {
-                    &::after {
-                        width: 100%;
-                    } 
-                }
-
                 a {
+                    display: block;
                     color: inherit;
+                    font-size: 20px;
+                    padding: 10px;
+                    position: relative;
+                    transition: .3s;
+
+                    &::after {
+                        content: "";
+                        position: absolute;
+                        left: 3%;
+                        bottom: 5px;
+                        height: 2px;
+                        width: 0%;
+                        background: #2c3e50;
+                    }
+
+                    &:hover {
+                        margin: 0 0 0 5px;
+                        &::after {
+                            width: 90%;
+                        }
+                    }
+
+                    &.active-link {
+                        margin: 0 0 0 5px;
+                        &::after {
+                            width: 90%;
+                        }
+                    }
                 }
             }
         }

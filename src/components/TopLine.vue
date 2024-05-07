@@ -78,6 +78,7 @@ export default {
                 width: 2px;
                 height: 80%;
                 background: #2c3e50;
+                text-shadow: 0 -0.5px 3px #ededed;
             }
              
             img {
@@ -85,6 +86,10 @@ export default {
                 width: 70px;
                 height: 70px;
                 display: inline-block;
+            }
+
+            p {
+                text-shadow: 0 -0.5px 3px #ededed;
             }
 
             a {
@@ -103,6 +108,7 @@ export default {
             background: #2c3e50;
             position: relative;
             cursor: pointer;
+            box-shadow: 0 -0.5px 3px #2c3e50;
 
             z-index: 1;
 
@@ -150,9 +156,10 @@ export default {
             color: #2c3e50;
             padding: 5px 30px;
             border-radius: 5px;
-            font-size: 18px;
             border: 2px solid #fff;
             transition: .3s;
+            font-size: 20px;
+            font-weight: 700;
 
             &:hover {
                 background: #2c3e50;
@@ -165,16 +172,22 @@ export default {
     top: 5px;
     right: 0;
     background-color: #2c3e50;
-    padding: 40px 60px 20px 60px;
+    padding: 40px 50px 20px 50px;
     border-radius: 5px;
     overflow: hidden;
     height: 0;
     opacity: 0;
     transition: all .3s;
+    box-shadow: 0 -0.5px 3px #2c3e50;
 
     &.__active {
         height: auto;
         opacity: 1;
+    }
+
+    ul {
+        padding: 5px;
+        text-align: center;
     }
 
     li {
@@ -205,7 +218,6 @@ export default {
 
         a {
             color: #fff;
-            font-size: 18px;
         }
     }
 }

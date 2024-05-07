@@ -30,6 +30,7 @@ legend { display: block; }
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: left;
+  font-size: 18px;
   color: #2c3e50;
 }
 
@@ -38,4 +39,17 @@ legend { display: block; }
   margin: 0 auto;
   padding: 0 15px;
 }
+
+.error {
+    text-align: center;
+    font-size: 20px;
+    margin: 40px 0 0 0;
+}
+
+.loading {
+    text-align: center;
+    font-size: 20px;
+    margin: 40px 0 0 0;
+}
+
 </style>

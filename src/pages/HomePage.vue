@@ -13,32 +13,43 @@
                             :error="eventsList.error"
                         />
                     </aside>
-                    <pre>
-                        funnelsData.data
-                    </pre>
                     <section class="body">
-                        <div class="funnels">
-                            <p>Событие: <b>{{funnelsData.data.eventData.eventName}}</b></p>
-                            <p>Описание: <b>{{funnelsData.data.eventData.eventDesk}}</b></p>
-                            <p>Ссылка на страницу события: <b><a :href="funnelsData.data.eventData.eventLink" target="_blank">{{funnelsData.data.data.eventLink}}</a></b></p>
+                        <div class="error" v-if="funnelsData.error" v-html="funnelsData.error"></div>
+                        <div class="loading" v-else-if="funnelsData.loading">загрузка...</div>
+                        <div class="funnels" v-else>
+                            <p>Событие: <b>{{funnelsData.data.name}}</b></p>
+                            <p>Описание: <b>{{funnelsData.data.desk}}</b></p>
+                            <p>Ссылка на страницу события: <b><a :href="funnelsData.data.link" target="_blank">{{funnelsData.data.link}}</a></b></p>
                             <br>
                             <h2>Воронки</h2>
 
                             <div class="funnels__tab-slider">
-                                <ul>
+                                <ul class="funnels__tab-slider-head">
                                     <li 
-                                        v-for="(value, key, index) in funnelsData.data.data.dataSources"
+                                        v-for="(value, key, index) in funnelsData.data.dataSources"
                                         :key="key"
                                         :class="{'__active' : index === activeSlide}"
                                         @click="activeSlide = index"
                                     >
-                                        {{ key }}
+                                        {{ getName(key) }}
                                     </li>
-                                    <li v-if="Object.keys(funnelsData.data.data.dataSources).length > 1">Общая</li>
                                 </ul>
+                                <div class="funnels__tab-slider-body">
+                                    <div
+                                        class="funnels__tab-slider-page"
+                                        v-for="(value, key, index) in funnelsData.data.dataSources"
+                                        :key="key"
+                                        :class="{'__active' : index === activeSlide}"
+                                    >
+                                        <funnel
+                                            :source="key"
+                                            :data="funnelsData.data.dataSources[key]"
+                                            :finalEventType="funnelsData.data.finalEventType"
+                                        />
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                         <funnel />
                     </section>
                 </div>
             </div>
@@ -89,6 +100,17 @@ export default {
             fetchEventsList: "eventsList/fetchEventsList",
             fetchFunnelsData: "funnelsData/fetchFunelsData",
         }),
+
+        getName(key) {
+            switch (key) {
+                case "tg":
+                    return "Телеграмм"
+                case "vk":
+                    return "Вконтакте"
+                case "email":
+                    return "Email"
+            }
+        }
     },
 
     created() {        
@@ -143,46 +165,63 @@ export default {
 
         &__tab-slider {
             margin: 30px 0 0 0;
-            ul {
-                display: flex;
-                position: relative;
-                overflow: hidden;
-                padding: 5px 20px 0 20px;
-                margin-right: -20px;
-                margin-left: -20px;
+            position: relative;
+            margin-right: -20px;
+            margin-left: -20px;
+            overflow: hidden;
+        }
+
+        &__tab-slider-head {
+            display: flex;
+            padding: 5px 20px 0 20px;
+            position: relative;
+            overflow: hidden;
                 
-                li {
-                    padding: 5px 25px;
-                    margin: 0 10px 0 0;
-                    box-shadow: 0 -0.5px 3px #939393;
-                    font-weight: 700;
+            li {
+                padding: 5px 30px;
+                margin: 0 10px 0 0;
+                box-shadow: 0 -0.5px 3px #939393;
+                font-weight: 700;
+                border-radius: 5px 5px 0 0;
+                cursor: pointer;
+                background-color: #ededed;
+                transition: .3s;
+
+                &:hover {
+                    color: #008f86;
+                }
+
+                &.__active {
+                    color: #008f86;
+                    background-color: #fff;
                     position: relative;
-                    border-radius: 5px 5px 0 0;
-                    cursor: pointer;
-                    z-index: 1;
-
-                    &:hover {
-                        color: #008f86;
-                    }
-
-                    &.__active {
-                        color: #008f86;
-                        z-index: 2;
-                    }
+                    z-index: 2;
                 }
+            }
 
-                &::after {
-                    content: "";
-                    display: block;
-                    position: absolute;
-                    top: 100%;
-                    left: 0;
-                    width: 100%;
-                    height: 15px;
-                    color: #ffffff;
-                    -webkit-box-shadow: 0 0 5px #939393;
-                    box-shadow: 0 0 5px #939393;
-                }
+            &::after {
+                content: "";
+                display: block;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                height: 15px;
+                color: #ffffff;
+                -webkit-box-shadow: 0 0 5px #939393;
+                box-shadow: 0 0 5px #939393;
+            }
+        }
+
+        &__tab-slider-body {
+            margin: 30px 0 0 0;
+        }
+
+        &__tab-slider-page {
+            display: none;
+
+            &.__active {
+                display: block;
             }
         }
     }
