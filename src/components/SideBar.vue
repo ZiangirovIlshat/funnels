@@ -47,7 +47,7 @@ export default {
 
 <style lang="scss" scoped>
     .sidebar {
-        min-height: calc(100vh - 117px);
+        height: 100%;
         border-left: 2px solid;
         border-right: 2px solid;
 

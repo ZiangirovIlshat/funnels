@@ -23,6 +23,9 @@
                             <a href="https://stat.owen.ru/polls" target="_blank">OWEN опросы</a>
                         </li>
                         <li>
+                            <a href="https://stat.owen.ru/funnels" target="_blank">OWEN маркетинговые <br>воронки (old)</a>
+                        </li>
+                        <li>
                             <router-link to="/admin">Админ панель</router-link>
                         </li>
                         <li>
@@ -115,9 +118,9 @@ export default {
             &::before, &::after, span {
                 content: "";
                 position: absolute;
-                left: 10%;
+                left: 20%;
                 height: 3px;
-                width: 80%;
+                width: 60%;
                 background: #fff;
                 transition: all .3s;
             }
@@ -158,7 +161,7 @@ export default {
             border-radius: 5px;
             border: 2px solid #fff;
             transition: .3s;
-            font-size: 20px;
+            font-size: 18px;
             font-weight: 700;
 
             &:hover {
@@ -172,7 +175,7 @@ export default {
     top: 5px;
     right: 0;
     background-color: #2c3e50;
-    padding: 40px 50px 20px 50px;
+    padding: 30px 20px 0 20px;
     border-radius: 5px;
     overflow: hidden;
     height: 0;
@@ -194,30 +197,24 @@ export default {
         margin: 0 0 20px 0;
         position: relative;
 
-        &::after {
-            content: "";
-            position: absolute;
-            bottom: -5px;
-            left: 0;
-            width: 0%;
-            height: 2px;
-            background: #fff;
-        }
-
-        &:hover {
-            &::after {
-                width: 100%;
-            } 
-        }
-
-        &:nth-child(3) {
-            &::after {
-                width: 0%;
-            }
-        }
-
         a {
             color: #fff;
+
+            &:hover {
+                &::after {
+                    width: 80%;
+                } 
+            }
+
+            &::after {
+                content: "";
+                position: absolute;
+                bottom: -5px;
+                left: 10%;
+                width: 0%;
+                height: 2px;
+                background: #fff;
+            }
         }
     }
 }

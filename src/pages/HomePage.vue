@@ -6,7 +6,7 @@
         <main class="content">
             <div class="container">
                 <div class="row">
-                    <aside class="sidebar">
+                    <aside class="side-menu">
                         <sidebar
                             :loading="eventsList.loading"
                             :data="getVisibleFunnelsData"
@@ -125,7 +125,7 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
     .wrapper {
         display: flex;
         flex-direction: column;
@@ -138,7 +138,7 @@ export default {
         display: flex;
         justify-content: space-between;
     }
-    .sidebar {
+    .side-menu {
         flex: 0 0 25%;
     }
     .body {
@@ -178,7 +178,7 @@ export default {
             overflow: hidden;
                 
             li {
-                padding: 5px 30px;
+                padding: 10px 30px;
                 margin: 0 10px 0 0;
                 box-shadow: 0 -0.5px 3px #939393;
                 font-weight: 700;
@@ -208,7 +208,6 @@ export default {
                 width: 100%;
                 height: 15px;
                 color: #ffffff;
-                -webkit-box-shadow: 0 0 5px #939393;
                 box-shadow: 0 0 5px #939393;
             }
         }
