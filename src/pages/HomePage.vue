@@ -1,7 +1,7 @@
 <template>
     <div class="wrapper">
         <header>
-            <topline />
+            <topline/>
         </header>
         <main class="content">
             <div class="container">
@@ -33,6 +33,13 @@
                                     >
                                         {{ getName(key) }}
                                     </li>
+                                    <li
+                                        v-if="sources.length > 1"
+                                        :class="{'__active' : sources.length === activeSlide}"
+                                        @click="activeSlide = sources.length"
+                                    >
+                                        Общая
+                                    </li>
                                 </ul>
                                 <div class="funnels__tab-slider-body">
                                     <div
@@ -44,6 +51,17 @@
                                         <funnel
                                             :source="key"
                                             :data="funnelsData.data.dataSources[key]"
+                                            :finalEventType="funnelsData.data.finalEventType"
+                                        />
+                                    </div>
+                                    <div
+                                        v-if="sources.length > 1"
+                                        class="funnels__tab-slider-page"
+                                        :class="{'__active' : sources.length === activeSlide}"
+                                    >
+                                        <generalfunnel
+                                            :sources="sources"
+                                            :data="funnelsData.data.dataSources"
                                             :finalEventType="funnelsData.data.finalEventType"
                                         />
                                     </div>
@@ -64,18 +82,21 @@ import { mapState, mapActions, mapGetters } from "vuex";
 import TopLine from "@/components/TopLine.vue"
 import SideBar from "@/components/SideBar.vue"
 import MarketingFunnel from "@/components/MarketingFunnel.vue"
+import GeneralMarketingFunnel from "@/components/GeneralMarketingFunnel.vue"
 
 export default {
     components: {
         "topline": TopLine,
         "sidebar": SideBar,
         "funnel": MarketingFunnel,
+        "generalfunnel": GeneralMarketingFunnel
     },
 
     data() {
         return {
             eventId: null,
             activeSlide: 0,
+            sources: [],
         }
     },
 
@@ -118,7 +139,9 @@ export default {
             this.eventId = this.$route.params.id || (this.getVisibleFunnelsData.length !== 0 ? this.getVisibleFunnelsData[0].id : null);
 
             if (this.eventId) {
-                this.fetchFunnelsData(this.eventId);
+                this.fetchFunnelsData(this.eventId).then(() => {
+                    this.sources = Object.keys(this.funnelsData.data.dataSources)
+                })
             }
         })
     }
@@ -137,6 +160,7 @@ export default {
     .row {
         display: flex;
         justify-content: space-between;
+        min-height: calc(100vh - 117px);
     }
     .side-menu {
         flex: 0 0 25%;

@@ -8,10 +8,12 @@ const eventsList = {
 
   getters: {
     getVisibleFunnelsData: (state) => state.data.filter(event => event.visible === true)
+    
   },
   
   mutations: {
     SET_EVENTSLIST_DATA(state, payload) {
+    
       state.data = payload
     },
     SET_EVENTSLIST_LOADING(state, payload) {
@@ -37,6 +39,6 @@ const eventsList = {
       }
     },
   }
-  }
+}
   
 export default eventsList;

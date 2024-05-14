@@ -1,6 +1,21 @@
 <template>
     <div class="funnel">
         <div class="funnel__body">
+            <div class="funnel__visualization">
+                <h3>График:</h3>
+                <ul>
+                    <li
+                        v-for="(item, key) in funnelData"
+                        :key="key"
+                        :style="{background: colors[source], width: item.percent + '%'}"
+                    >
+                        <span :class="{'__outside' : item.percent < 25}">
+                            {{key + ': ' + addThousandSeparator(item.count) + ' (' + item.percent + '%)'}}
+                        </span>
+                    </li>
+                </ul>
+            </div>
+            <br>
             <div class="funnel__filters" v-if="finalEventType === 'registrationAndViewing'">
                 <h3>Фильтры:</h3>
                 <p>
@@ -17,26 +32,11 @@
                 </p>
             </div>
             <br>
-            <div class="funnel__visualization">
-                <h3>График:</h3>
-                <ul>
-                    <li
-                        v-for="(item, key) in funnelData"
-                        :key="key"
-                        :style="{background: colors[source], width: item.percent + '%'}"
-                    >
-                        <span :class="{'__outside' : item.percent < 25}">
-                            {{key + ': ' + item.count + ' (' + item.percent + '%)'}}
-                        </span>
-                    </li>
-                </ul>
-            </div>
-            <br>
             <div class="funnel__email-lists" v-if="finalEventType === 'registrationAndViewing'">
                 <h3>Списки:</h3>
-                <mailslist :list="this.filteredData.registrations"></mailslist>
+                <list :list="filteredData.registrations">Регистраций</list>
                 <br>
-                <mailslist :list="this.filteredData.views"></mailslist>
+                <list :list="filteredData.views">Просмотров</list>
             </div>
         </div>
     </div>
@@ -49,8 +49,8 @@ import MailsList from "@/components/MailsList.vue"
 export default {
     name: "MarketingFunnel",
 
-    comments: {
-        "mailslist": MailsList,
+    components: {
+        "list": MailsList,
     },
 
     props: {
@@ -93,6 +93,8 @@ export default {
                 "email" : "#FF9C24",
             },
 
+            filteredData: [],
+
             funnelData: null,
 
             filterUniqueValues: false,
@@ -101,6 +103,10 @@ export default {
     },
 
     methods: {
+        addThousandSeparator(num) {
+            return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+        },
+
         getFunnel() {
             if(this.finalEventType === "registrationAndViewing") return this.getRegistrationAndViewingFunnel()
             if(this.finalEventType === "goOrganizerWebsite") return this.getGoOrganizerWebsiteFunnel()

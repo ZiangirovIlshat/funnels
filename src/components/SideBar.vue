@@ -15,7 +15,7 @@
                 </div>
                 <ul v-else>
                     <li v-for="event in data" :key="event.id">
-                        <router-link :to="'/' + event.id">{{event.name}}</router-link>
+                        <router-link :to="path + event.id">{{event.name}}</router-link>
                     </li>
                 </ul>
             </div>
@@ -41,6 +41,10 @@ export default {
             require: true,
             type: String,
         },
+        path: {
+            default: "/",
+            type: String,
+        }
     },
 }
 </script>
