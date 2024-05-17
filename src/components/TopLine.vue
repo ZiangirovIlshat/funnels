@@ -26,8 +26,7 @@
                             <a href="https://stat.owen.ru/funnels" target="_blank">OWEN маркетинговые <br>воронки (old)</a>
                         </li>
                         <li>
-                            <router-link v-if="$route.path === '/'" to="/admin">Админ панель</router-link>
-                            <router-link v-else to="/">На главную</router-link>
+                            <router-link to="/admin">Админ панель</router-link>
                         </li>
                         <li>
                             <button class="header__exit-btn">

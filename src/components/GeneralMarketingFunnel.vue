@@ -4,14 +4,26 @@
             <div class="funnel__visualization">
                 <h3>График:</h3>
                 <ul>
-                    <li v-for="item in funnelData" :key="item">
-                        <span
-                            v-for="(row, key) in item"
-                            :key="key"
-                            :style="{background: colors[key], width: row.percent + '%'}"
+                    <template
+                        v-for="(item, keyI) in funnelData"
+                        :key="item"
+                    >
+                        <li 
+                            v-if="visualizationData[keyI].percent > 0"
+                            :style="{'min-width': visualizationData[keyI].percent + '%'}"
                         >
-                        {{row}}</span>
-                    </li>
+                            <template
+                                v-for="(sourceCount, keyY) in item"
+                                :key="keyY"
+                            >
+                                <span
+                                    :style="{background: colors[keyY], width: (sourceCount / visualizationData[keyI].count * 100) + '%' }"
+                                    v-if="sourceCount > 0"
+                                >
+                                </span>
+                            </template>
+                        </li>
+                    </template>
                 </ul>
             </div>
             <br>
@@ -31,29 +43,26 @@
                 </p>
             </div>
             <br>
-            <!-- <div class="funnel__email-lists" v-if="finalEventType === 'registrationAndViewing'">
+            <div class="funnel__email-lists" v-if="finalEventType === 'registrationAndViewing'">
                 <h3>Списки:</h3>
                 <list :list="filteredData.registrations">Регистраций</list>
                 <br>
                 <list :list="filteredData.views">Просмотров</list>
-            </div> -->
-            <pre>
-                {{funnelData}}
-            </pre>
+            </div>
         </div>
     </div>
 </template>
 
 <script>
 
-// import MailsList from "@/components/MailsList.vue"
+import MailsList from "@/components/MailsList.vue"
 
 export default {
     name: "GeneralMarketingFunnel",
 
-    // components: {
-    //     "list": MailsList,
-    // },
+    components: {
+        "list": MailsList,
+    },
 
     props: {
         sources: {
@@ -98,6 +107,7 @@ export default {
             filteredData: [],
 
             funnelData: null,
+            visualization: null,
 
             filterUniqueValues: false,
             filterOurEmails: false,
@@ -137,6 +147,41 @@ export default {
             return funnelsData
         },
 
+        getVisualization() {
+            let globalCounts = {}
+
+            let totalData = this.funnelData.total
+            globalCounts.total = { "count" : totalData.tg + totalData.vk + totalData.email, "percent" : 100 }
+
+            function getRowData(sum) {
+                return {
+                    "count" : sum, 
+                    "percent" : (100 * (sum / globalCounts.total.count)).toFixed(2)
+                }
+            }
+
+            let readData = this.funnelData.read
+            globalCounts.read = getRowData(readData.tg + readData.vk + readData.email)
+
+            let transitionsData = this.funnelData.transitions
+            globalCounts.transitions = getRowData(transitionsData.tg + transitionsData.vk + transitionsData.email)
+
+            if(this.finalEventType === "registrationAndViewing") {
+                let registrationsData = this.funnelData.registrations
+                globalCounts.registrations = getRowData(registrationsData.tg + registrationsData.vk + registrationsData.email)
+                
+                let viewsData = this.funnelData.views
+                globalCounts.views = getRowData(viewsData.tg + viewsData.vk + viewsData.email)
+            }
+
+            if(this.finalEventType === "goOrganizerWebsite") {
+                let trafficData = this.funnelData.trafficToOrganizerWebsite
+                globalCounts.trafficToOrganizerWebsite = getRowData(trafficData.tg + trafficData.vk + trafficData.email)
+            }
+
+            return globalCounts;
+        },
+
         getFilteredData() {
             this.filteredData = JSON.parse(JSON.stringify(this.data))
 
@@ -169,6 +214,7 @@ export default {
     created() {
         this.filteredData = Object.assign({}, this.data);
         this.funnelData = this.getFunnels()
+        this.visualizationData = this.getVisualization()
     }
 }
 </script>
@@ -220,11 +266,18 @@ export default {
                 li {
                     border-radius: 5px;
                     box-shadow: 0 0 5px #939393;
-                    height: 40px;
+                    padding: 5px;
                     display: flex;
                     align-items: center;
                     justify-content: start;
                     position: relative;
+
+                    span {
+                        display: block;
+                        border-radius: 5px;
+                        border: 2px solid #fff;
+                        height: 35px;
+                    }
                 }
             }
 		}
