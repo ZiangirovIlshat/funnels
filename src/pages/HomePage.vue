@@ -33,13 +33,13 @@
                                     >
                                         {{ getName(key) }}
                                     </li>
-                                    <li
+                                    <!-- <li
                                         v-if="sources.length > 1"
                                         :class="{'__active' : sources.length === activeSlide}"
                                         @click="activeSlide = sources.length"
                                     >
                                         Общая
-                                    </li>
+                                    </li> -->
                                 </ul>
                                 <div class="funnels__tab-slider-body">
                                     <div
@@ -54,7 +54,7 @@
                                             :finalEventType="funnelsData.data.finalEventType"
                                         />
                                     </div>
-                                    <div
+                                    <!-- <div
                                         v-if="sources.length > 1"
                                         class="funnels__tab-slider-page"
                                         :class="{'__active' : sources.length === activeSlide}"
@@ -64,7 +64,7 @@
                                             :data="funnelsData.data.dataSources"
                                             :finalEventType="funnelsData.data.finalEventType"
                                         />
-                                    </div>
+                                    </div> -->
                                 </div>
                             </div>
                         </div>
@@ -82,14 +82,14 @@ import { mapState, mapActions, mapGetters } from "vuex";
 import TopLine from "@/components/TopLine.vue"
 import SideBar from "@/components/SideBar.vue"
 import MarketingFunnel from "@/components/MarketingFunnel.vue"
-import GeneralMarketingFunnel from "@/components/GeneralMarketingFunnel.vue"
+// import GeneralMarketingFunnel from "@/components/GeneralMarketingFunnel.vue"
 
 export default {
     components: {
         "topline": TopLine,
         "sidebar": SideBar,
         "funnel": MarketingFunnel,
-        "generalfunnel": GeneralMarketingFunnel
+        // "generalfunnel": GeneralMarketingFunnel
     },
 
     data() {
@@ -102,7 +102,7 @@ export default {
 
     watch: {
         '$route.params.id': function(newId, oldId) {
-            if(newId !== oldId) this.fetchFunnelsData(this.$route.params.id)
+            if(newId !== oldId) this.getData()
         }
     },
 
@@ -131,19 +131,25 @@ export default {
                 case "email":
                     return "Email"
             }
-        }
-    },
+        },
 
-    created() {        
-        this.fetchEventsList().then(() => {
+        async getData() {
             this.eventId = this.$route.params.id || (this.getVisibleFunnelsData.length !== 0 ? this.getVisibleFunnelsData[0].id : null);
 
             if (this.eventId) {
                 this.fetchFunnelsData(this.eventId).then(() => {
+                    if(this.funnelsData.data.visible === false) { this.funnelsData.error = "Не найдено событие" ; return }
                     this.sources = Object.keys(this.funnelsData.data.dataSources)
                 })
+            } else {
+                this.funnelsData.error = "Не найдено событие"
             }
-        })
+        }
+    },
+
+    async created() {
+        await this.fetchEventsList();
+        this.getData();
     }
 }
 </script>

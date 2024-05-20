@@ -5,8 +5,9 @@
                 <div class="header__logo">
                     <img src="../assets/logo.png" alt="owen logo">
                     <p>OWEN<br>FUNNELS</p>
-                    <router-link to="/"></router-link>
+                    <router-link to="/" title="На главную"></router-link>
                 </div>
+                <slot></slot>
                 <div
                     class="header__burger-menu" 
                     @click="menuIsOpen = !menuIsOpen"
@@ -26,10 +27,13 @@
                             <a href="https://stat.owen.ru/funnels" target="_blank">OWEN маркетинговые <br>воронки (old)</a>
                         </li>
                         <li>
-                            <router-link to="/admin">Админ панель</router-link>
+                            <router-link to="/admin" target="_blank">Админ панель</router-link>
                         </li>
                         <li>
-                            <button class="header__exit-btn">
+                            <button
+                                class="header__exit-btn"
+                                @click="exit()"
+                            >
                                 Выйти
                             </button>
                         </li>
@@ -48,7 +52,13 @@ export default {
         return {
             menuIsOpen: false,
         }
-    }
+    },
+
+    methods: {
+        exit() {
+            if (confirm('Вы уверенны что хотите выйти?')) return
+        }
+    },
 }
 </script>
 

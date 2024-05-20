@@ -31,7 +31,26 @@ export default {
 
     methods: {
         async login() {
-
+            fetch("https://localhost/funnels_api/user/login", {
+                method: "POST",
+                credentials: "include",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ "password" : this.password })
+            })
+            .then(response => {
+                if (response.ok) {
+                    console.log('Куки авторизации установлены');
+                } else if (response.status === 401) {
+                    console.log('Ошибка: неверный пароль или другая ошибка');
+                } else {
+                    console.log('Произошла ошибка:', response.status);
+                }
+            })
+            .catch(error => {
+                console.error('Произошла ошибка:', error);
+            });
         }
     },
 }

@@ -17,6 +17,9 @@
                     <li v-for="event in data" :key="event.id">
                         <router-link :to="path + event.id">{{event.name}}</router-link>
                     </li>
+                    <li class="sidebar__btn-container">
+                        <slot></slot>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -136,9 +139,14 @@ export default {
             }
         }
 
+        &__btn-container {
+            text-align: center;
+        }
+
         &__error {
             font-size: 20px;
-            margin: 40px 0 0 0;
+            margin: 20px 0 0 0;
+            text-align: center;
         }
     }
 </style>

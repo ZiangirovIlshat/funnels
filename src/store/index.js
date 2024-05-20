@@ -3,6 +3,7 @@ import { createStore } from "vuex";
 import eventsList from "./modules/eventsList";
 import funnelsData from "./modules/funnelsData";
 import funnelsParams from "./modules/funnelsParams";
+import updateData from "./modules/updateData";
 
 export default createStore({
   getters: {
@@ -18,5 +19,6 @@ export default createStore({
     eventsList,
     funnelsData,
     funnelsParams,
+    updateData,
   }
 });
