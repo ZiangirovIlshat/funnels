@@ -8,7 +8,6 @@ const eventsList = {
 
   getters: {
     getVisibleFunnelsData: (state) => state.data.filter(event => event.visible === true)
-    
   },
   
   mutations: {

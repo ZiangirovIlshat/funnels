@@ -10,10 +10,16 @@
                     ✖
                 </div>
             </header>
-            <div class="form__error-message" v-if="updateData.error"> {{updateData.error}} </div>
-            <div class="form__loading" v-if="updateData.loading">Загрузка...</div>
-            <div class="form__message" v-if="updateData.message">{{updateData.message}}</div>
-            <br>
+            <div v-if="updateData.error"> 
+                <p class="form__error-message">{{updateData.error}}</p>
+            </div>
+            <div v-if="updateData.loading">
+                <p class="form__loading">Загрузка...</p>
+            </div>
+            <div v-if="updateData.data">
+                <p class="form__error-message" v-if="updateData.data.error"> {{updateData.data.error}}</p>
+                <p class="form__message" v-if="updateData.data.message"> {{updateData.data.message}}</p>
+            </div>
             <p>
                 <label>
                     <b>Включен: </b>
@@ -62,29 +68,58 @@
             </p>
             <hr>
             <p>Внешние источники:</p>
-            <p>
-                <label>
+            <div>
+                <!-- <label>
                     tg postId:
                     <input type="text" v-model="formData.params.externalSources.tg">
-                </label>
-            </p>
-            <p>
-                <label>
+                </label> -->
+
+                <!-- the kostyl -->
+                <fieldset>
+                    <legend>tg</legend>
+                    <label>
+                        Кол-во подписчиков
+                        <input type="number" v-model="formData.params.externalSources.tg.total">
+                    </label>
+                    <label>
+                        Кол-во просмотров
+                        <input type="number" v-model="formData.params.externalSources.tg.read">
+                    </label>
+                </fieldset>
+                <!-- _______ -->
+            </div>
+            <div>
+                <!-- <label>
                     vk postId:
                     <input type="text" v-model="formData.params.externalSources.vk">
-                </label>
-            </p>
-            <p>
+                </label> -->
+
+                <!-- the kostyl -->
+                <fieldset>
+                    <legend>vk</legend>
+                    <label>
+                        Кол-во подписчиков
+                        <input type="number" v-model="formData.params.externalSources.vk.total">
+                    </label>
+                    <label>
+                        Кол-во просмотров
+                        <input type="number" v-model="formData.params.externalSources.vk.read">
+                    </label>
+                </fieldset>
+                <!-- _______ -->
+            </div>
+            <div>
                 <label>
                     mailing id:
                     <input type="text" v-model="formData.params.externalSources.email">
                 </label>
-            </p>
+            </div>
             <p>
                 <button 
                     class="form__save-btn"
-                    @click="fetchUpdateData(formData)"
-                >Создать ✔
+                    @click="fetchUpdateData(JSON.stringify(formData))"
+                >
+                    Создать ✔
                 </button>
             </p>
         </div>
@@ -110,8 +145,20 @@ export default {
                 params: {
                     organizerWebsiteUrl: "",
                     externalSources: {
-                        tg: "",
-                        vk: "",
+                        // tg: "",
+                        // vk: "",
+
+                        // the kostyl
+                        tg: {
+                            "total": 0,
+                            "read": 0,
+                        },
+                        vk: {
+                            "total": 0,
+                            "read": 0,
+                        },
+
+
                         email: "",
                     }
                 },
@@ -134,12 +181,17 @@ export default {
             if (confirm('Вы уверенны что хотите завершить добавление данных?')) this.$emit('close')
         }
     },
+
+    created() {
+        // this.updateData.data = [];
+        // this.updateData.loading = false;
+        // this.updateData.error = '';
+    }
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
     .form {
-        width: 600px;
         background: #fff;
         padding: 20px;
 
@@ -179,7 +231,7 @@ export default {
             padding: 5px;
         }
 
-        input[type="text"], textarea {
+        input[type="text"], input[type="number"], textarea {
             display: block;
             width: 500px;
         }
@@ -187,6 +239,17 @@ export default {
         input[type="checkbox"] {
             width: 15px;
             height: 15px;
+        }
+
+        fieldset {
+            border: 1px solid #D3D3D3;
+            padding: 10px;
+            margin: 0 0 10px 0;
+            width: 500px;
+
+            input[type="number"] {
+                width: 400px;
+            }
         }
 
 		&__save-btn {

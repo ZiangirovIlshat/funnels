@@ -104,7 +104,8 @@ export default {
 
     methods: {
         addThousandSeparator(num) {
-            return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+            if(num) return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+            return 0
         },
 
         getFunnel() {

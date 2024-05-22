@@ -56,7 +56,9 @@ export default {
 
     methods: {
         exit() {
-            if (confirm('Вы уверенны что хотите выйти?')) return
+            if (!confirm('Вы уверенны что хотите выйти?')) return
+
+            // TODO:
         }
     },
 }
@@ -123,7 +125,7 @@ export default {
             cursor: pointer;
             box-shadow: 0 -0.5px 3px #2c3e50;
 
-            z-index: 1;
+            z-index: 10;
 
             &::before, &::after, span {
                 content: "";
@@ -182,6 +184,7 @@ export default {
 }
 .menu {
     position: absolute;
+    z-index: 5;
     top: 5px;
     right: 0;
     background-color: #2c3e50;

@@ -15,7 +15,8 @@
                                 :path="'/admin/'"
                             >
                                 <button class="side-menu__create-btn"
-                                    @click="modalPageIsOpen = !modalPageIsOpen">
+                                    @click="modalPageIsOpen = !modalPageIsOpen"
+                                >
                                     Добавить событие +
                                 </button>
                             </sidebar>
@@ -24,19 +25,29 @@
                             <div class="error" v-if="funnelsParams.error" v-html="funnelsData.error"></div>
                             <div class="loading" v-else-if="funnelsParams.loading">загрузка...</div>
                             <div class="funnels" v-else>
-                                <div class="funnels__error-message" v-if="errorMessage">
-                                    {{errorMessage}}
+                                <div v-if="errorMessage"> 
+                                    <p class="funnels__error-message">{{errorMessage}}</p>
+                                </div>
+                                <div v-if="message">
+                                    <p class="funnels__message" v-if="message"> {{message}}</p>
+                                </div>
+                                <div>
+                                    <p class="funnels__loading" v-if="loading">Загрузка...</p>
                                 </div>
                                 <p class="funnels__btn-container">
                                     <button 
                                         class="funnels__btn save"
                                         :class="{'__need-save' : needSaved}"
-                                        @click="fetchUpdateData(formData)"
-                                    >Сохранить ✔</button>
+                                        @click="saveData()"
+                                    >
+                                        Сохранить ✔
+                                    </button>
                                     <button
                                         class="funnels__btn delete"
                                         @click="deleteFunnel()"
-                                    >Удалить ✖</button>
+                                    >
+                                        Удалить ✖
+                                    </button>
                                 </p>
                                 <hr>
                                 <p><a :href="'/' + formData.id" target="_blank">Посмотреть на отображение →</a></p>
@@ -47,34 +58,54 @@
                                         <input type="checkbox" v-model="formData.visible">
                                     </label>
                                 </p>
-                                <p>
-                                    <label>
-                                        <b>id события: </b>
-                                        <input :value="formData.id" readonly>
-                                    </label>
-                                </p>
+                                <p><b>id события:</b> <span><b>{{formData.id}}</b></span></p>
                                 <p>
                                     <label>
                                         <b>Название события:</b>
-                                        <input type="text" v-model="formData.name">
+                                        <input
+                                            :class="{
+                                                '__need-save' :formData.name !== funnelsParams.data.name
+                                            }"
+                                            type="text"
+                                            v-model="formData.name"
+                                        >
                                     </label>
                                 </p>
                                 <p>
                                     <label>
                                         <b>Описание события:</b>
-                                        <textarea cols="30" rows="10" v-model="formData.desk"></textarea>
+                                        <textarea
+                                            :class="{
+                                                '__need-save' :formData.desk !== funnelsParams.data.desk
+                                            }"
+                                            cols="30"
+                                            rows="10"
+                                            v-model="formData.desk"
+                                        >
+                                        </textarea>
                                     </label>
                                 </p>
                                 <p>
                                     <label>
                                         <b>Ссылка на страницу события:</b>
-                                        <input type="text" v-model="formData.link">
+                                        <input
+                                            :class="{
+                                                '__need-save' :formData.link !== funnelsParams.data.link
+                                            }"
+                                            type="text"
+                                            v-model="formData.link"
+                                        >
                                     </label>
                                 </p>
                                 <p>
                                     <label>
                                         <b>Сценарий: </b>
-                                        <select v-model="formData.finalEventType">
+                                        <select
+                                            :class="{
+                                                '__need-save' :formData.finalEventType !== funnelsParams.data.finalEventType
+                                            }"
+                                            v-model="formData.finalEventType"
+                                        >
                                             <option value="registrationAndViewing">Регистрация и просмотр</option>
                                             <option value="goOrganizerWebsite">Переход на сайт организатора</option>
                                         </select>
@@ -83,27 +114,103 @@
                                 <p v-if="formData.finalEventType === 'goOrganizerWebsite'">
                                     <label>
                                         <b>Адрес сайта организатора:</b>
-                                        <input type="text" v-model="formData.organizerWebsiteUrl">
+                                        <input
+                                            :class="{
+                                                '__need-save' :formData.organizerWebsiteUrl !== funnelsParams.data.organizerWebsiteUrl
+                                            }"
+                                            type="text"
+                                            v-model="formData.organizerWebsiteUrl"
+                                        >
                                     </label>
                                 </p>
                                 <hr>
                                 <h2>Внешние источники</h2>
-                                <p>
+                                <div>
+                                <!-- <label>
+                                    tg postId:
+                                    <input
+                                        :class="{
+                                            '__need-save' :formData.params.externalSources.tg !== funnelsParams.data.params.externalSources.tg
+                                        }"
+                                        type="text"
+                                        v-model="formData.params.externalSources.tg"
+                                    >
+                                </label> -->
+
+                                <!-- the kostyl -->
+                                <fieldset>
+                                    <legend>tg</legend>
                                     <label>
-                                        tg postId:
-                                        <input type="text" v-model="formData.params.externalSources.tg">
+                                        Кол-во подписчиков
+                                        <input
+                                            :class="{
+                                                '__need-save' :formData.params.externalSources.tg.total !== funnelsParams.data.params.externalSources.tg.total
+                                            }"
+                                            type="number"
+                                            v-model="formData.params.externalSources.tg.total"
+                                        >
                                     </label>
-                                </p>
-                                <p>
                                     <label>
-                                        vk postId:
-                                        <input type="text" v-model="formData.params.externalSources.vk">
+                                        Кол-во просмотров
+                                        <input
+                                            :class="{
+                                                '__need-save' :formData.params.externalSources.tg.read !== funnelsParams.data.params.externalSources.tg.read
+                                            }"
+                                            type="number"
+                                            v-model="formData.params.externalSources.tg.read"
+                                        >
                                     </label>
-                                </p>
+                                </fieldset>
+                                <!-- __________ -->
+                            </div>
+                            <div>
+                                <!-- <label>
+                                    vk postId:
+                                    <input
+                                        class="{
+                                            '__need-save' :formData.params.externalSources.vk !== funnelsParams.data.params.externalSources.vk
+                                        }"
+                                        type="text"
+                                        v-model="formData.params.externalSources.vk"
+                                    >
+                                </label> -->
+
+                                <!-- the kostyl -->
+                                <fieldset>
+                                    <legend>vk</legend>
+                                    <label>
+                                        Кол-во подписчиков
+                                        <input
+                                            :class="{
+                                                '__need-save' :formData.params.externalSources.vk.total !== funnelsParams.data.params.externalSources.vk.total
+                                            }"
+                                            type="number"
+                                            v-model="formData.params.externalSources.vk.total"
+                                        >
+                                    </label>
+                                    <label>
+                                        Кол-во просмотров
+                                        <input
+                                            :class="{
+                                                '__need-save' :formData.params.externalSources.vk.read !== funnelsParams.data.params.externalSources.vk.read
+                                            }"
+                                            type="number"
+                                            v-model="formData.params.externalSources.vk.read"
+                                        >
+                                    </label>
+                                </fieldset>
+                                <!-- __________ -->
+                            </div>
                                 <p>
                                     <label>
                                         mailing id:
-                                        <input type="text" v-model="formData.params.externalSources.email">
+                                        <input
+                                            :class="{
+                                                '__need-save' :formData.params.externalSources.email !== funnelsParams.data.params.externalSources.email
+                                            }"
+                                            type="text"
+                                            v-model="formData.params.externalSources.email"
+                                        >
                                     </label>
                                 </p>
                             </div>
@@ -148,9 +255,18 @@ export default {
                 finalEventType: "registrationAndViewing",
                 params: {
                     externalSources: {
-                        tg: 0,
-                        vk: 0,
-                        email: 0,
+                        // tg: "",
+                        // vk: "",
+
+                        // the kostyl
+                        tg: {
+                            "total": 0,
+                            "read": 0,
+                        },
+                        vk: {
+                            "total": 0,
+                            "read": 0,
+                        },
                     }
                 },
                 organizerWebsiteUrl: "",
@@ -160,32 +276,10 @@ export default {
 
             errorMessage: "",
             message: "",
+            loading: "",
 
             modalPageIsOpen: false,
         };
-    },
-
-    watch: {
-        '$route.params.id': function(newId, oldId) {
-            if (newId !== oldId) {
-                this.fetchFunelsParams(newId).then(() => {
-                    this.getData();
-                }).catch(error => {
-                    this.errorMessage = error.message;
-                });
-            }
-        },
-
-        formData: {
-            handler(newValue, oldValue) {
-                if (newValue !== oldValue && JSON.stringify(newValue) !== JSON.stringify(this.funnelsParams)) {
-                    this.needSaved = true;
-                } else {
-                    this.needSaved = false;
-                }
-            },
-            deep: true
-        }
     },
 
     computed: {
@@ -203,32 +297,71 @@ export default {
             fetchUpdateData: "updateData/fetchUpdateData",
         }),
 
-        createFunnel() {
-            
+        async saveData() {
+            this.loading = true
+            try {
+                const response = await fetch("https://localhost/funnels_api/admin/update", {
+                    method: "POST",
+                    body: JSON.stringify(this.formData)
+                });
+
+                const responseText = await response.json();
+                
+                if(responseText.error) {
+                    this.errorMessage = responseText.error
+                }
+
+                if(responseText.message) {
+                    this.message = responseText.message
+                }
+
+                this.getData()
+
+            } catch (error) {
+                this.errorMessage = error
+            } finally {
+                this.loading = false
+            }
         },
 
         async deleteFunnel() {
-            this.errorMessage = "";
+            if (!confirm('Вы действительно хотите удалить данные о событии?')) return
+                
+            this.loading = true
+            try {
+                let params = new URLSearchParams(); 
+                params.set('id', this.formData.id);
+                let response = await fetch("https://localhost/funnels_api/admin/delete", {
+                    method: "POST",
+                    body: params
+                });
 
-            if (confirm('Вы действительно хотите удалить данные о событии?')) { 
-                try {
-                    let response = await fetch("https://localhost/funnels_api/admin/delete", {
-                        method: "POST",
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({ id: this.formData.id })
-                    });
-
-                    if (!response.ok) throw new Error('Network response was not ok');
-                    let result = await response.json();
-
-                    if (result.error) {
-                        this.errorMessage = result.error;
-                    }
-                } catch (e) {
-                    this.errorMessage = e.message;
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
                 }
+
+                const responseText = await response.json();
+
+                if (responseText.error) {
+                    this.errorMessage = responseText.error;
+                    return;
+                }
+
+                if(responseText.message) {
+                    this.message = responseText.message
+                }
+
+                try {
+                    await this.fetchEventsList()
+                    this.getData()
+                } catch (error) {
+                    this.errorMessage = responseText.error;
+                }
+
+            } catch (error) {
+                this.errorMessage = error;
+            } finally {
+                this.loading = false
             }
         },
 
@@ -238,21 +371,56 @@ export default {
             if (this.eventId) {
                 try {
                     await this.fetchFunelsParams(this.eventId);
-                    this.formData = { ...this.funnelsParams.data };
+                    this.formData = JSON.parse(JSON.stringify(this.funnelsParams.data));
                 } catch (error) {
-                    this.errorMessage = error.message;
+                    this.errorMessage = error;
                 }
             }
+        },
+
+        deepcompare(a, b){
+            if(typeof a !== typeof b) return false;
+            if(typeof a !== 'object') return a === b;
+            if(Object.keys(a).length != Object.keys(b).length) return false;
+            for(var k in a){
+                if(!(k in b)) return false;
+                if(!this.deepcompare(a[k], b[k])) return false;
+            }
+            return true;
+        },
+    },
+
+    watch: {
+        '$route.params.id': async function(newId, oldId) {
+            if (newId !== oldId) {
+                try {
+                    await this.fetchFunelsParams(newId)
+                    this.getData();
+
+                    this.errorMessage = ""
+                    this.message = ""
+                    this.loading = ""
+                } catch (error) {
+                    this.errorMessage = error;
+                }
+            }
+        },
+
+        formData: {
+            handler() {
+                if(!this.deepcompare(this.funnelsParams.data, this.formData)) {
+                    this.needSaved = true
+                } else {
+                    this.needSaved = false
+                }
+            },
+            deep: true
         }
     },
 
     async created() {
-        try {
-            await this.fetchEventsList();
-            this.getData();
-        } catch (error) {
-            this.errorMessage = error.message;
-        }
+        await this.fetchEventsList();
+        this.getData();
     }
 }
 </script>
@@ -293,6 +461,28 @@ export default {
     }
     .funnels {
         padding: 20px;
+        position: relative;
+
+        &__loading {
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            background: rgba(255, 255, 255, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 20px;
+        }
+
+        &__message {
+            border: 1px solid #008f86;
+            margin: 0 0 20px 0;
+            padding: 5px;
+            background: #f2f2f2;
+        }
 
         &__error-message {
             border: 1px solid #9f0412;
@@ -314,6 +504,10 @@ export default {
 
             &.save {
                 background-color: #008f86;
+
+                &.__need-save {
+                    background-color: #fea000;
+                }
             }
 
             &.delete {
@@ -334,12 +528,21 @@ export default {
 
         p {
             margin: 0 0 20px 0;
+
+            span {
+                color: #008f86;
+            }
         }
 
         input, textarea, select {
             border: 1px solid;
             border-radius: 5px;
             padding: 5px;
+
+            &.__need-save {
+                border: 1px solid #fea000;
+                outline: 1px solid #fea000;
+            }
         }
 
         input[type="text"], textarea {
@@ -350,6 +553,17 @@ export default {
         input[type="checkbox"] {
             width: 15px;
             height: 15px;
+        }
+
+        fieldset {
+            border: 1px solid #D3D3D3;
+            padding: 10px;
+            margin: 0 0 10px 0;
+            width: 500px;
+
+            input[type="number"] {
+                width: 400px;
+            }
         }
 
         h2 {
