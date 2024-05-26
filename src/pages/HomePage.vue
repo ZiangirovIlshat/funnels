@@ -33,13 +33,13 @@
                                     >
                                         {{ getName(key) }}
                                     </li>
-                                    <!-- <li
+                                    <li
                                         v-if="sources.length > 1"
                                         :class="{'__active' : sources.length === activeSlide}"
                                         @click="activeSlide = sources.length"
                                     >
-                                        Общая
-                                    </li> -->
+                                        Статистика
+                                    </li>
                                 </ul>
                                 <div class="funnels__tab-slider-body">
                                     <div
@@ -54,7 +54,7 @@
                                             :finalEventType="funnelsData.data.finalEventType"
                                         />
                                     </div>
-                                    <!-- <div
+                                    <div
                                         v-if="sources.length > 1"
                                         class="funnels__tab-slider-page"
                                         :class="{'__active' : sources.length === activeSlide}"
@@ -64,7 +64,7 @@
                                             :data="funnelsData.data.dataSources"
                                             :finalEventType="funnelsData.data.finalEventType"
                                         />
-                                    </div> -->
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -82,14 +82,14 @@ import { mapState, mapActions, mapGetters } from "vuex";
 import TopLine from "@/components/TopLine.vue"
 import SideBar from "@/components/SideBar.vue"
 import MarketingFunnel from "@/components/MarketingFunnel.vue"
-// import GeneralMarketingFunnel from "@/components/GeneralMarketingFunnel.vue"
+import StatPage from "@/components/StatPage.vue"
 
 export default {
     components: {
         "topline": TopLine,
         "sidebar": SideBar,
         "funnel": MarketingFunnel,
-        // "generalfunnel": GeneralMarketingFunnel
+        "generalfunnel": StatPage
     },
 
     data() {

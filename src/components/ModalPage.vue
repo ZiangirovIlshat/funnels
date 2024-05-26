@@ -10,125 +10,124 @@
                     ✖
                 </div>
             </header>
-            <div v-if="updateData.error"> 
-                <p class="form__error-message">{{updateData.error}}</p>
+            <div v-if="errorMessage"> 
+                <p class="form__error-message">{{errorMessage}}</p>
             </div>
-            <div v-if="updateData.loading">
+            <div v-if="loading">
                 <p class="form__loading">Загрузка...</p>
             </div>
-            <div v-if="updateData.data">
-                <p class="form__error-message" v-if="updateData.data.error"> {{updateData.data.error}}</p>
-                <p class="form__message" v-if="updateData.data.message"> {{updateData.data.message}}</p>
+            <div v-if="message">
+                <p class="form__message" v-if="message"> {{message}}</p>
             </div>
-            <p>
-                <label>
-                    <b>Включен: </b>
-                    <input type="checkbox" v-model="formData.visible">
-                </label>
-            </p>
-            <p>
-                <label>
-                    <b>id события:</b>
-                    <p><i>id должно совпадать с id группы событий в трекере*</i></p>
-                    <input v-model="formData.id">
-                </label>
-            </p>
-            <p>
-                <label>
-                    <b>Название события:</b>
-                    <input type="text" v-model="formData.name">
-                </label>
-            </p>
-            <p>
-                <label>
-                    <b>Описание события:</b>
-                    <textarea cols="30" rows="10" v-model="formData.desk"></textarea>
-                </label>
-            </p>
-            <p>
-                <label>
-                    <b>Ссылка на страницу события:</b>
-                    <input type="text" v-model="formData.link">
-                </label>
-            </p>
-            <p>
-                <label>
-                    <b>Сценарий: </b>
-                    <select v-model="formData.finalEventType">
-                        <option value="registrationAndViewing">Регистрация и просмотр</option>
-                        <option value="goOrganizerWebsite">Переход на сайт организатора</option>
-                    </select>
-                </label>
-            </p>
-            <p v-if="formData.finalEventType === 'goOrganizerWebsite'">
-                <label>
-                    <b>Адрес сайта организатора:</b>
-                    <input type="text" v-model="formData.params.organizerWebsiteUrl">
-                </label>
-            </p>
-            <hr>
-            <p>Внешние источники:</p>
-            <div>
-                <!-- <label>
-                    tg postId:
-                    <input type="text" v-model="formData.params.externalSources.tg">
-                </label> -->
+            <div v-if="!created">
+                <p>
+                    <label>
+                        <b>Включен: </b>
+                        <input type="checkbox" v-model="formData.visible">
+                    </label>
+                </p>
+                <p>
+                    <label>
+                        <b>id события:</b>
+                        <p><i>id должно совпадать с id группы событий в трекере*</i></p>
+                        <input v-model="formData.id">
+                    </label>
+                </p>
+                <p>
+                    <label>
+                        <b>Название события:</b>
+                        <input type="text" v-model="formData.name">
+                    </label>
+                </p>
+                <p>
+                    <label>
+                        <b>Описание события:</b>
+                        <textarea cols="30" rows="10" v-model="formData.desk"></textarea>
+                    </label>
+                </p>
+                <p>
+                    <label>
+                        <b>Ссылка на страницу события:</b>
+                        <input type="text" v-model="formData.link">
+                    </label>
+                </p>
+                <p>
+                    <label>
+                        <b>Сценарий: </b>
+                        <select v-model="formData.finalEventType">
+                            <option value="registrationAndViewing">Регистрация и просмотр</option>
+                            <option value="goOrganizerWebsite">Переход на сайт организатора</option>
+                        </select>
+                    </label>
+                </p>
+                <p v-if="formData.finalEventType === 'goOrganizerWebsite'">
+                    <label>
+                        <b>Адрес сайта организатора:</b>
+                        <input type="text" v-model="formData.params.organizerWebsiteUrl">
+                    </label>
+                </p>
+                <hr>
+                <p>Внешние источники:</p>
+                <div>
+                    <!-- <label>
+                        tg postId:
+                        <input type="text" v-model="formData.params.externalSources.tg">
+                    </label> -->
 
-                <!-- the kostyl -->
-                <fieldset>
-                    <legend>tg</legend>
-                    <label>
-                        Кол-во подписчиков
-                        <input type="number" v-model="formData.params.externalSources.tg.total">
-                    </label>
-                    <label>
-                        Кол-во просмотров
-                        <input type="number" v-model="formData.params.externalSources.tg.read">
-                    </label>
-                </fieldset>
-                <!-- _______ -->
-            </div>
-            <div>
-                <!-- <label>
-                    vk postId:
-                    <input type="text" v-model="formData.params.externalSources.vk">
-                </label> -->
+                    <!-- the kostyl -->
+                    <fieldset>
+                        <legend>tg</legend>
+                        <label>
+                            Кол-во подписчиков
+                            <input type="number" v-model="formData.params.externalSources.tg.total">
+                        </label>
+                        <label>
+                            Кол-во просмотров
+                            <input type="number" v-model="formData.params.externalSources.tg.read">
+                        </label>
+                    </fieldset>
+                    <!-- _______ -->
+                </div>
+                <div>
+                    <!-- <label>
+                        vk postId:
+                        <input type="text" v-model="formData.params.externalSources.vk">
+                    </label> -->
 
-                <!-- the kostyl -->
-                <fieldset>
-                    <legend>vk</legend>
+                    <!-- the kostyl -->
+                    <fieldset>
+                        <legend>vk</legend>
+                        <label>
+                            Кол-во подписчиков
+                            <input type="number" v-model="formData.params.externalSources.vk.total">
+                        </label>
+                        <label>
+                            Кол-во просмотров
+                            <input type="number" v-model="formData.params.externalSources.vk.read">
+                        </label>
+                    </fieldset>
+                    <!-- _______ -->
+                </div>
+                <div>
                     <label>
-                        Кол-во подписчиков
-                        <input type="number" v-model="formData.params.externalSources.vk.total">
+                        mailing id:
+                        <input type="number" v-model="formData.params.externalSources.email">
                     </label>
-                    <label>
-                        Кол-во просмотров
-                        <input type="number" v-model="formData.params.externalSources.vk.read">
-                    </label>
-                </fieldset>
-                <!-- _______ -->
+                </div>
+                <p>
+                    <button 
+                        class="form__save-btn"
+                        @click="saveData()"
+                    >
+                        Создать ✔
+                    </button>
+                </p>
             </div>
-            <div>
-                <label>
-                    mailing id:
-                    <input type="text" v-model="formData.params.externalSources.email">
-                </label>
-            </div>
-            <p>
-                <button 
-                    class="form__save-btn"
-                    @click="fetchUpdateData(JSON.stringify(formData))"
-                >
-                    Создать ✔
-                </button>
-            </p>
         </div>
     </div>
 </template>
 
 <script>
-
-import { mapState, mapActions } from "vuex";
 
 export default {
     name : "ModalPage",
@@ -158,35 +157,59 @@ export default {
                             "read": 0,
                         },
 
-
-                        email: "",
+                        email: 0,
                     }
                 },
             },
+
+            errorMessage: "",
+            message: "",
+            loading: false,
+
+
+            created: false,
         };
     },
 
-    computed: {
-        ...mapState({
-            updateData: state => state.updateData,
-        }),
-    },
-
     methods: {
-        ...mapActions({
-            fetchUpdateData: "updateData/fetchUpdateData",
-        }),
+        async saveData() {
+            this.errorMessage = "";
+            this.message = "";
+            this.loading = true;
+
+            try {
+                const response = await fetch("https://localhost/funnels_api/admin/update", {
+                    method: "POST",
+                    body: JSON.stringify(this.formData),
+                });
+
+                const responseText = await response.json();
+
+                if(responseText.error) {
+                    throw new Error(responseText.error)
+                }
+
+                if(responseText.message) {
+                    this.message = responseText.message;
+                }
+
+                this.$emit('create')
+                this.created = true
+            } catch (error) {
+                this.errorMessage = error
+            } finally {
+                this.loading = false
+            }
+        },
 
         close() {
+            if(this.created) {
+                this.$emit('close');
+                return;
+            }
             if (confirm('Вы уверенны что хотите завершить добавление данных?')) this.$emit('close')
         }
     },
-
-    created() {
-        // this.updateData.data = [];
-        // this.updateData.loading = false;
-        // this.updateData.error = '';
-    }
 }
 </script>
 
@@ -194,7 +217,9 @@ export default {
     .form {
         background: #fff;
         padding: 20px;
-
+        max-width: 600px;
+        min-width: 300px;
+        position: relative;
 
 		&__header {
             display: flex;
@@ -213,6 +238,20 @@ export default {
             margin: 0 0 10px 0;
         }
 
+        &__loading {
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            background: rgba(255, 255, 255, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 20px;
+        }
+
         &__error-message {
             border: 1px solid #9f0412;
             padding: 5px;
@@ -221,7 +260,7 @@ export default {
 
         &__message {
             border: 1px solid #008f86;
-            padding: 5px;
+            padding: 20px 40px;
             background: #f2f2f2;
         }
 

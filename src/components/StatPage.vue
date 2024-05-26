@@ -58,7 +58,7 @@
 import MailsList from "@/components/MailsList.vue"
 
 export default {
-    name: "GeneralMarketingFunnel",
+    name: "StatPage",
 
     components: {
         "list": MailsList,
@@ -268,6 +268,7 @@ export default {
                     box-shadow: 0 0 5px #939393;
                     padding: 5px;
                     display: flex;
+                    gap: 2px;
                     align-items: center;
                     justify-content: start;
                     position: relative;
@@ -275,7 +276,8 @@ export default {
                     span {
                         display: block;
                         border-radius: 5px;
-                        border: 2px solid #fff;
+                        outline: 2px solid #fff;
+                        min-width: 5px;
                         height: 35px;
                     }
                 }

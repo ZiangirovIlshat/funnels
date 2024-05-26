@@ -30,6 +30,8 @@ const eventsList = {
         const response = await fetch("https://localhost/funnels_api/funnels/list");
         const data = await response.json();
 
+        data.sort((a, b) => new Date(b.date) - new Date(a.date));
+
         commit("SET_EVENTSLIST_DATA", data);
       } catch (error) {
         commit("SET_EVENTSLIST_ERROR", "<b>Ой! Что-то пошло не так... :(</b><br>Не удалось получить данные");

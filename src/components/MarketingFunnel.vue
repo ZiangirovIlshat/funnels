@@ -4,15 +4,19 @@
             <div class="funnel__visualization">
                 <h3>График:</h3>
                 <ul>
-                    <li
+                    <template 
                         v-for="(item, key) in funnelData"
                         :key="key"
-                        :style="{background: colors[source], width: item.percent + '%'}"
                     >
-                        <span :class="{'__outside' : item.percent < 25}">
-                            {{key + ': ' + addThousandSeparator(item.count) + ' (' + item.percent + '%)'}}
-                        </span>
-                    </li>
+                        <li
+                            :style="{background: colors[source], width: item.percent + '%'}"
+                            v-if="item.count > 0"
+                        >
+                            <span :class="{'__outside' : item.percent < 25}">
+                                {{key + ': ' + addThousandSeparator(item.count) + ' (' + item.percent + '%)'}}
+                            </span>
+                        </li>
+                    </template>
                 </ul>
             </div>
             <br>

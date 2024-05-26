@@ -22,9 +22,9 @@
                             </sidebar>
                         </aside>
                         <section class="body">
-                            <div class="error" v-if="funnelsParams.error" v-html="funnelsData.error"></div>
+                            <div class="error" v-if="funnelsParams.error" v-html="funnelsParams.error"></div>
                             <div class="loading" v-else-if="funnelsParams.loading">загрузка...</div>
-                            <div class="funnels" v-else>
+                            <div class="funnels" v-if="funnelsParams.data">
                                 <div v-if="errorMessage"> 
                                     <p class="funnels__error-message">{{errorMessage}}</p>
                                 </div>
@@ -126,93 +126,93 @@
                                 <hr>
                                 <h2>Внешние источники</h2>
                                 <div>
-                                <!-- <label>
-                                    tg postId:
-                                    <input
-                                        :class="{
-                                            '__need-save' :formData.params.externalSources.tg !== funnelsParams.data.params.externalSources.tg
-                                        }"
-                                        type="text"
-                                        v-model="formData.params.externalSources.tg"
-                                    >
-                                </label> -->
-
-                                <!-- the kostyl -->
-                                <fieldset>
-                                    <legend>tg</legend>
-                                    <label>
-                                        Кол-во подписчиков
+                                    <!-- <label>
+                                        tg postId:
                                         <input
                                             :class="{
-                                                '__need-save' :formData.params.externalSources.tg.total !== funnelsParams.data.params.externalSources.tg.total
-                                            }"
-                                            type="number"
-                                            v-model="formData.params.externalSources.tg.total"
-                                        >
-                                    </label>
-                                    <label>
-                                        Кол-во просмотров
-                                        <input
-                                            :class="{
-                                                '__need-save' :formData.params.externalSources.tg.read !== funnelsParams.data.params.externalSources.tg.read
-                                            }"
-                                            type="number"
-                                            v-model="formData.params.externalSources.tg.read"
-                                        >
-                                    </label>
-                                </fieldset>
-                                <!-- __________ -->
-                            </div>
-                            <div>
-                                <!-- <label>
-                                    vk postId:
-                                    <input
-                                        class="{
-                                            '__need-save' :formData.params.externalSources.vk !== funnelsParams.data.params.externalSources.vk
-                                        }"
-                                        type="text"
-                                        v-model="formData.params.externalSources.vk"
-                                    >
-                                </label> -->
-
-                                <!-- the kostyl -->
-                                <fieldset>
-                                    <legend>vk</legend>
-                                    <label>
-                                        Кол-во подписчиков
-                                        <input
-                                            :class="{
-                                                '__need-save' :formData.params.externalSources.vk.total !== funnelsParams.data.params.externalSources.vk.total
-                                            }"
-                                            type="number"
-                                            v-model="formData.params.externalSources.vk.total"
-                                        >
-                                    </label>
-                                    <label>
-                                        Кол-во просмотров
-                                        <input
-                                            :class="{
-                                                '__need-save' :formData.params.externalSources.vk.read !== funnelsParams.data.params.externalSources.vk.read
-                                            }"
-                                            type="number"
-                                            v-model="formData.params.externalSources.vk.read"
-                                        >
-                                    </label>
-                                </fieldset>
-                                <!-- __________ -->
-                            </div>
-                                <p>
-                                    <label>
-                                        mailing id:
-                                        <input
-                                            :class="{
-                                                '__need-save' :formData.params.externalSources.email !== funnelsParams.data.params.externalSources.email
+                                                '__need-save' :formData.params.externalSources.tg !== funnelsParams.data.params.externalSources.tg
                                             }"
                                             type="text"
-                                            v-model="formData.params.externalSources.email"
+                                            v-model="formData.params.externalSources.tg"
                                         >
-                                    </label>
-                                </p>
+                                    </label> -->
+
+                                    <fieldset>
+                                        <legend>tg</legend>
+                                        <label>
+                                            Кол-во подписчиков
+                                            <input
+                                                :class="{
+                                                    '__need-save' :formData.params.externalSources.tg.total !== funnelsParams.data.params.externalSources.tg.total
+                                                }"
+                                                type="number"
+                                                v-model="formData.params.externalSources.tg.total"
+                                            >
+                                        </label>
+                                        <br>
+                                        <label>
+                                            Кол-во просмотров
+                                            <input
+                                                :class="{
+                                                    '__need-save' :formData.params.externalSources.tg.read !== funnelsParams.data.params.externalSources.tg.read
+                                                }"
+                                                type="number"
+                                                v-model="formData.params.externalSources.tg.read"
+                                            >
+                                        </label>
+                                    </fieldset>
+                                </div>
+                                <div>
+                                    <!-- <label>
+                                        vk postId:
+                                        <input
+                                            class="{
+                                                '__need-save' :formData.params.externalSources.vk !== funnelsParams.data.params.externalSources.vk
+                                            }"
+                                            type="text"
+                                            v-model="formData.params.externalSources.vk"
+                                        >
+                                    </label> -->
+
+                                    <fieldset>
+                                        <legend>vk</legend>
+                                        <label>
+                                            Кол-во подписчиков
+                                            <input
+                                                :class="{
+                                                    '__need-save' :formData.params.externalSources.vk.total !== funnelsParams.data.params.externalSources.vk.total
+                                                }"
+                                                type="number"
+                                                v-model="formData.params.externalSources.vk.total"
+                                            >
+                                        </label>
+                                        <br>
+                                        <label>
+                                            Кол-во просмотров
+                                            <input
+                                                :class="{
+                                                    '__need-save' :formData.params.externalSources.vk.read !== funnelsParams.data.params.externalSources.vk.read
+                                                }"
+                                                type="number"
+                                                v-model="formData.params.externalSources.vk.read"
+                                            >
+                                        </label>
+                                    </fieldset>
+                                </div>
+                                <div>
+                                    <p>
+                                        <label>
+                                            mailing id:
+                                            <input
+                                                :class="{
+                                                    '__need-save' :formData.params.externalSources.email !== funnelsParams.data.params.externalSources.email
+                                                }"
+                                                type="number"
+                                                v-model="formData.params.externalSources.email"
+                                            >
+                                        </label>
+                                    </p>
+                                </div>
                             </div>
                         </section>
                     </div>
@@ -221,6 +221,7 @@
             <div class="modal-page" v-if="modalPageIsOpen">
                 <modalpage
                     @close="modalPageIsOpen = false"
+                    @create="fetchEventsList()"
                 />
             </div>
         </div>
@@ -246,30 +247,18 @@ export default {
     data() {
         return {
             formData: {
-                id: "",
-                date: "",
-                visible: "",
-                name: "",
-                desk: "",
-                link: "",
-                finalEventType: "registrationAndViewing",
+                id: "",date: "",visible: "",name: "",desk: "",link: "",finalEventType: "registrationAndViewing",
                 params: {
                     externalSources: {
                         // tg: "",
                         // vk: "",
 
                         // the kostyl
-                        tg: {
-                            "total": 0,
-                            "read": 0,
-                        },
-                        vk: {
-                            "total": 0,
-                            "read": 0,
-                        },
+                        tg: { "total": 0, "read": 0, },
+                        vk: { "total": 0, "read": 0, },
                     }
                 },
-                organizerWebsiteUrl: "",
+                organizerWebsiteUrl: 0,
             },
 
             needSaved: false,
@@ -286,7 +275,6 @@ export default {
         ...mapState({
             eventsList: state => state.eventsList,
             funnelsParams: state => state.funnelsParams,
-            updateData: state => state.updateData,
         }),
     },
 
@@ -294,7 +282,6 @@ export default {
         ...mapActions({
             fetchEventsList: "eventsList/fetchEventsList",
             fetchFunelsParams: "funnelsParams/fetchFunelsParams",
-            fetchUpdateData: "updateData/fetchUpdateData",
         }),
 
         async saveData() {
@@ -305,10 +292,12 @@ export default {
                     body: JSON.stringify(this.formData)
                 });
 
+                console.log(JSON.stringify(this.formData))
+
                 const responseText = await response.json();
                 
                 if(responseText.error) {
-                    this.errorMessage = responseText.error
+                    throw new Error(responseText.error);
                 }
 
                 if(responseText.message) {
@@ -328,6 +317,7 @@ export default {
             if (!confirm('Вы действительно хотите удалить данные о событии?')) return
                 
             this.loading = true
+
             try {
                 let params = new URLSearchParams(); 
                 params.set('id', this.formData.id);
@@ -351,12 +341,8 @@ export default {
                     this.message = responseText.message
                 }
 
-                try {
-                    await this.fetchEventsList()
-                    this.getData()
-                } catch (error) {
-                    this.errorMessage = responseText.error;
-                }
+                window.location.pathname = "admin/"
+                this.getData()
 
             } catch (error) {
                 this.errorMessage = error;
@@ -366,15 +352,30 @@ export default {
         },
 
         async getData() {
-            this.eventId = this.$route.params.id || (this.eventsList.data.length !== 0 ? this.eventsList.data[0].id : null);
+            await this.fetchEventsList();
 
-            if (this.eventId) {
-                try {
-                    await this.fetchFunelsParams(this.eventId);
-                    this.formData = JSON.parse(JSON.stringify(this.funnelsParams.data));
-                } catch (error) {
-                    this.errorMessage = error;
+            let eventId = "";
+
+            if(this.$route.params.id === "") {
+                if(this.eventsList.data.length > 0) {
+                    window.location.pathname = "admin/" + this.eventsList.data[0].id
+                    eventId = this.eventsList.data[0].id
+                } else {
+                    this.errorMessage = "Не найдено событий"
                 }
+            } else {
+                eventId = this.$route.params.id
+            }
+
+            try {
+                await this.fetchFunelsParams(eventId);
+                this.formData = structuredClone(this.funnelsParams.data);
+
+                if(this.formData.error) {
+                    this.errorMessage = "Не удалось получить данные по событию"
+                }
+            } catch (error) {
+                this.errorMessage = error;
             }
         },
 
@@ -395,7 +396,11 @@ export default {
             if (newId !== oldId) {
                 try {
                     await this.fetchFunelsParams(newId)
-                    this.getData();
+                    this.formData = JSON.parse(JSON.stringify(this.funnelsParams.data));
+
+                    if(this.formData.error) {
+                        this.errorMessage = "Не удалось получить данные по событию"
+                    }
 
                     this.errorMessage = ""
                     this.message = ""
@@ -419,8 +424,7 @@ export default {
     },
 
     async created() {
-        await this.fetchEventsList();
-        this.getData();
+        this.getData()
     }
 }
 </script>
@@ -574,10 +578,10 @@ export default {
     }
 
     .modal-page {
+        padding: 20px;
         position: absolute;
-        min-width: 100vw;
-        min-height: 100vh;
-        width: 600px;
+        width: 100vw;
+        height: 100vh;
         background: rgba(44, 62, 80, 0.4);
         display: flex;
         justify-content: center;

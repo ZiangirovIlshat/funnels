@@ -24,6 +24,7 @@ const funnelsParams = {
       try {
         const response = await fetch("https://localhost/funnels_api/admin/get?id=" + id);
         const data = await response.json();
+
         commit("SET_FUNNELSPARAMS_DATA", data);
       } catch (error) {
         commit("SET_FUNNELSPARAMS_ERROR", "<b>Ой! Что-то пошло не так... :(</b><br>Не удалось получить данные");
