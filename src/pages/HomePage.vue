@@ -17,53 +17,56 @@
                         <div class="error" v-if="funnelsData.error" v-html="funnelsData.error"></div>
                         <div class="loading" v-else-if="funnelsData.loading">загрузка...</div>
                         <div class="funnels" v-else>
-                            <p>Событие: <b>{{funnelsData.data.name}}</b></p>
-                            <p>Описание: <b>{{funnelsData.data.desk}}</b></p>
-                            <p>Ссылка на страницу события: <b><a :href="funnelsData.data.link" target="_blank">{{funnelsData.data.link}}</a></b></p>
-                            <br>
-                            <h2>Воронки</h2>
+                            <p class="error" v-if="errorMessage"> {{errorMessage}}</p>
 
-                            <div class="funnels__tab-slider">
-                                <ul class="funnels__tab-slider-head">
-                                    <li 
-                                        v-for="(value, key, index) in funnelsData.data.dataSources"
-                                        :key="key"
-                                        :class="{'__active' : index === activeSlide}"
-                                        @click="activeSlide = index"
-                                    >
-                                        {{ getName(key) }}
-                                    </li>
-                                    <li
-                                        v-if="sources.length > 1"
-                                        :class="{'__active' : sources.length === activeSlide}"
-                                        @click="activeSlide = sources.length"
-                                    >
-                                        Статистика
-                                    </li>
-                                </ul>
-                                <div class="funnels__tab-slider-body">
-                                    <div
-                                        class="funnels__tab-slider-page"
-                                        v-for="(value, key, index) in funnelsData.data.dataSources"
-                                        :key="key"
-                                        :class="{'__active' : index === activeSlide}"
-                                    >
-                                        <funnel
-                                            :source="key"
-                                            :data="funnelsData.data.dataSources[key]"
-                                            :finalEventType="funnelsData.data.finalEventType"
-                                        />
-                                    </div>
-                                    <div
-                                        v-if="sources.length > 1"
-                                        class="funnels__tab-slider-page"
-                                        :class="{'__active' : sources.length === activeSlide}"
-                                    >
-                                        <generalfunnel
-                                            :sources="sources"
-                                            :data="funnelsData.data.dataSources"
-                                            :finalEventType="funnelsData.data.finalEventType"
-                                        />
+                            <div v-else>
+                                <p>Событие: <b>{{funnelsData.data.name}}</b></p>
+                                <p>Описание: <b>{{funnelsData.data.desk}}</b></p>
+                                <p>Ссылка на страницу события: <b><a :href="funnelsData.data.link" target="_blank">{{funnelsData.data.link}}</a></b></p>
+                                <br>
+                                <h2>Воронки</h2>
+                                <div class="funnels__tab-slider">
+                                    <ul class="funnels__tab-slider-head">
+                                        <li 
+                                            v-for="(value, key, index) in funnelsData.data.dataSources"
+                                            :key="key"
+                                            :class="{'__active' : index === activeSlide}"
+                                            @click="activeSlide = index"
+                                        >
+                                            {{ getName(key) }}
+                                        </li>
+                                        <!-- <li
+                                            v-if="sources.length > 1"
+                                            :class="{'__active' : sources.length === activeSlide}"
+                                            @click="activeSlide = sources.length"
+                                        >
+                                            Статистика
+                                        </li> -->
+                                    </ul>
+                                    <div class="funnels__tab-slider-body">
+                                        <div
+                                            class="funnels__tab-slider-page"
+                                            v-for="(value, key, index) in funnelsData.data.dataSources"
+                                            :key="key"
+                                            :class="{'__active' : index === activeSlide}"
+                                        >
+                                            <funnel
+                                                :source="key"
+                                                :data="funnelsData.data.dataSources[key]"
+                                                :finalEventType="funnelsData.data.finalEventType"
+                                            />
+                                        </div>
+                                        <!-- <div
+                                            v-if="sources.length > 1"
+                                            class="funnels__tab-slider-page"
+                                            :class="{'__active' : sources.length === activeSlide}"
+                                        >
+                                            <generalfunnel
+                                                :sources="sources"
+                                                :data="funnelsData.data.dataSources"
+                                                :finalEventType="funnelsData.data.finalEventType"
+                                            />
+                                        </div> -->
                                     </div>
                                 </div>
                             </div>
@@ -82,14 +85,14 @@ import { mapState, mapActions, mapGetters } from "vuex";
 import TopLine from "@/components/TopLine.vue"
 import SideBar from "@/components/SideBar.vue"
 import MarketingFunnel from "@/components/MarketingFunnel.vue"
-import StatPage from "@/components/StatPage.vue"
+// import StatPage from "@/components/StatPage.vue"
 
 export default {
     components: {
         "topline": TopLine,
         "sidebar": SideBar,
         "funnel": MarketingFunnel,
-        "generalfunnel": StatPage
+        // "generalfunnel": StatPage
     },
 
     data() {
@@ -97,12 +100,8 @@ export default {
             eventId: null,
             activeSlide: 0,
             sources: [],
-        }
-    },
 
-    watch: {
-        '$route.params.id': function(newId, oldId) {
-            if(newId !== oldId) this.getData()
+            errorMessage: "",
         }
     },
 
@@ -134,21 +133,48 @@ export default {
         },
 
         async getData() {
-            this.eventId = this.$route.params.id || (this.getVisibleFunnelsData.length !== 0 ? this.getVisibleFunnelsData[0].id : null);
+            await this.fetchEventsList();
 
-            if (this.eventId) {
-                this.fetchFunnelsData(this.eventId).then(() => {
+            let eventId = "";
+
+            if(this.$route.params.id === "") {
+                if(this.getVisibleFunnelsData.length > 0) {
+                    window.location.pathname = "/new_funnels/" + this.getVisibleFunnelsData[0].id
+
+                    eventId = this.getVisibleFunnelsData[0].id
+                } else {
+                    this.errorMessage = "Не найдено событий"
+                }
+            } else {
+                eventId = this.$route.params.id
+            }
+
+            try {
+                await this.fetchFunnelsData(eventId);
+                if(this.funnelsData.data.visible === false) {this.errorMessage = "Не найдено событие"; return;}
+                this.sources = Object.keys(this.funnelsData.data.dataSources)
+            } catch (error) {
+                this.errorMessage = error;
+            }
+        },
+    },
+
+    watch: {
+        '$route.params.id': async function(newId, oldId) {
+            if (newId !== oldId) {
+                try {
+                    if(!newId) {this.getData(); return}
+                    await this.fetchFunnelsData(newId)
                     if(this.funnelsData.data.visible === false) { this.funnelsData.error = "Не найдено событие" ; return }
                     this.sources = Object.keys(this.funnelsData.data.dataSources)
-                })
-            } else {
-                this.funnelsData.error = "Не найдено событие"
+                } catch (error) {
+                    this.errorMessage = error;
+                }
             }
-        }
+        },
     },
 
     async created() {
-        await this.fetchEventsList();
         this.getData();
     }
 }

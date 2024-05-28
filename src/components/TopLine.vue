@@ -58,7 +58,8 @@ export default {
         exit() {
             if (!confirm('Вы уверенны что хотите выйти?')) return
 
-            // TODO:
+            const response = fetch("https://stat.owen.ru/funnels_api/user/logout");
+            if(response.ok) this.$router.push("home")
         }
     },
 }

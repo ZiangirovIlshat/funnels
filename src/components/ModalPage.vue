@@ -129,18 +129,15 @@
 
 <script>
 
+import { mapState } from "vuex";
+
 export default {
     name : "ModalPage",
 
     data() {
         return {
             formData: {
-                id: "",
-                visible: true,
-                name: "",
-                desk: "",
-                link: "",
-                finalEventType: "registrationAndViewing",
+                id: "", visible: true, name: "", desk: "", link: "", finalEventType: "registrationAndViewing",
                 params: {
                     organizerWebsiteUrl: "",
                     externalSources: {
@@ -171,14 +168,26 @@ export default {
         };
     },
 
+    computed: {
+        ...mapState({
+            eventsList: (state) => state.eventsList,
+        }),
+    },
+
     methods: {
         async saveData() {
             this.errorMessage = "";
             this.message = "";
             this.loading = true;
 
+            if(this.checkId(this.formData.id)) {
+                this.errorMessage = "Событиe с таким id уже существует";
+                this.loading = false;
+                return;
+            }
+
             try {
-                const response = await fetch("https://localhost/funnels_api/admin/update", {
+                const response = await fetch("https://stat.owen.ru/funnels_api/admin/update", {
                     method: "POST",
                     body: JSON.stringify(this.formData),
                 });
@@ -202,14 +211,23 @@ export default {
             }
         },
 
+        checkId(id) {
+            return this.eventsList.data.find((element) => element.id === id);
+        },
+
         close() {
             if(this.created) {
                 this.$emit('close');
                 return;
             }
+
             if (confirm('Вы уверенны что хотите завершить добавление данных?')) this.$emit('close')
-        }
+        },
     },
+
+    created() {
+        this.checkId()
+    }
 }
 </script>
 

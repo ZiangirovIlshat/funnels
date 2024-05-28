@@ -31,26 +31,17 @@ export default {
 
     methods: {
         async login() {
-            fetch("https://localhost/funnels_api/user/login", {
-                method: "POST",
-                credentials: "include",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({ "password" : this.password })
-            })
-            .then(response => {
-                if (response.ok) {
-                    console.log('Куки авторизации установлены');
-                } else if (response.status === 401) {
-                    console.log('Ошибка: неверный пароль или другая ошибка');
-                } else {
-                    console.log('Произошла ошибка:', response.status);
-                }
-            })
-            .catch(error => {
-                console.error('Произошла ошибка:', error);
-            });
+            try {
+                const response = await fetch("https://stat.owen.ru/funnels_api/user/login", {
+                    method: "POST",
+                    credentials: "include",
+                    body: new URLSearchParams({"password" : this.password})
+                })
+
+                if(response.ok) this.$router.push("home")
+            } catch (error) {
+                this.isInvalidPassword = true
+            }
         }
     },
 }

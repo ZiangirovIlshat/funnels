@@ -22,7 +22,7 @@ const funnelsData = {
     async fetchFunelsData({ commit }, id) {
       commit("SET_FUNNELS_LOADING", true);
       try {
-        const response = await fetch("https://localhost/funnels_api/funnels/get?id=" + id);
+        const response = await fetch("https://stat.owen.ru/funnels_api/funnels/get?id=" + id);
         const data = await response.json();
         commit("SET_FUNNELS_DATA", data);
       } catch (error) {

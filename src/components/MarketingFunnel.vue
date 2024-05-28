@@ -37,7 +37,10 @@
             </div>
             <br>
             <div class="funnel__email-lists" v-if="finalEventType === 'registrationAndViewing'">
-                <h3>Списки:</h3>
+                <div class="funnel__lists-header">
+                    <h3>Списки:</h3>
+                    <button @click="downloadXls()">Скачать как xls</button>
+                </div>
                 <list :list="filteredData.registrations">Регистраций</list>
                 <br>
                 <list :list="filteredData.views">Просмотров</list>
@@ -165,6 +168,10 @@ export default {
             this.filteredData.registrations = this.filteredData.registrations.filter((email) => email.slice(-7) !== "owen.ru");
             this.filteredData.views = this.filteredData.views.filter((email) => email.slice(-7) !== "owen.ru");
         },
+
+        downloadXls() {
+            
+        },
     },
 
     created() {
@@ -210,6 +217,25 @@ export default {
                 }
             }
         }
+
+		&__email-lists {
+            h3 {
+                margin: 0;
+            }
+		}
+
+		&__lists-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 0 0 20px 0;
+
+            button {
+                font-weight: 600;
+                text-decoration: underline;
+            }
+		}
+
 
 		&__visualization {
             ul {

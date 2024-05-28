@@ -247,7 +247,7 @@ export default {
     data() {
         return {
             formData: {
-                id: "",date: "",visible: "",name: "",desk: "",link: "",finalEventType: "registrationAndViewing",
+                id: "", date: "", visible: "", name: "", desk: "", link: "", finalEventType: "registrationAndViewing",
                 params: {
                     externalSources: {
                         // tg: "",
@@ -287,7 +287,7 @@ export default {
         async saveData() {
             this.loading = true
             try {
-                const response = await fetch("https://localhost/funnels_api/admin/update", {
+                const response = await fetch("https://stat.owen.ru/funnels_api/admin/update", {
                     method: "POST",
                     body: JSON.stringify(this.formData)
                 });
@@ -321,7 +321,7 @@ export default {
             try {
                 let params = new URLSearchParams(); 
                 params.set('id', this.formData.id);
-                let response = await fetch("https://localhost/funnels_api/admin/delete", {
+                let response = await fetch("https://stat.owen.ru/funnels_api/admin/delete", {
                     method: "POST",
                     body: params
                 });
@@ -341,7 +341,7 @@ export default {
                     this.message = responseText.message
                 }
 
-                window.location.pathname = "admin/"
+                this.$router.push("admin")
                 this.getData()
 
             } catch (error) {
@@ -356,9 +356,11 @@ export default {
 
             let eventId = "";
 
+            console.log("da")
+
             if(this.$route.params.id === "") {
                 if(this.eventsList.data.length > 0) {
-                    window.location.pathname = "admin/" + this.eventsList.data[0].id
+                    window.location.pathname = "/new_funnels/admin/" + this.eventsList.data[0].id
                     eventId = this.eventsList.data[0].id
                 } else {
                     this.errorMessage = "Не найдено событий"
