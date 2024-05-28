@@ -26,8 +26,11 @@
                         <li>
                             <a href="https://stat.owen.ru/funnels" target="_blank">OWEN маркетинговые <br>воронки (old)</a>
                         </li>
-                        <li>
+                        <li v-if="admin">
                             <router-link to="/admin" target="_blank">Админ панель</router-link>
+                        </li>
+                        <li v-if="$route.name === 'admin'">
+                            <router-link to="/">На главную</router-link>
                         </li>
                         <li>
                             <button
@@ -51,6 +54,8 @@ export default {
     data() {
         return {
             menuIsOpen: false,
+
+            admin: false,
         }
     },
 
@@ -62,6 +67,23 @@ export default {
             if(response.ok) this.$router.push("home")
         }
     },
+
+    async created() {
+        try {
+            const response = await fetch("https://stat.owen.ru/funnels_api/user/check_admin_auth", {
+              method: "GET",
+              credentials: "same-origin"
+            });
+
+            if (response.ok) {
+                this.admin = true
+            } else {
+                this.admin = false
+            }
+        } catch {
+            this.admin = false
+        }
+    }
 }
 </script>
 

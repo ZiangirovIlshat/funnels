@@ -112,6 +112,10 @@ export default {
                     position: relative;
                     transition: .3s;
 
+                    @media(max-width: 992px) {
+                        font-size: 15px;
+                    }
+
                     &::after {
                         content: "";
                         position: absolute;

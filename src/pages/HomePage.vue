@@ -243,6 +243,10 @@ export default {
                 background-color: #ededed;
                 transition: .3s;
 
+                @media(max-width: 992px) {
+                    padding: 5px 15px;
+                }
+
                 &:hover {
                     color: #008f86;
                 }

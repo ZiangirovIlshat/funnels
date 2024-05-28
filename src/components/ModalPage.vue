@@ -186,6 +186,8 @@ export default {
                 return;
             }
 
+            console.log(JSON.stringify(this.formData))
+
             try {
                 const response = await fetch("https://stat.owen.ru/funnels_api/admin/update", {
                     method: "POST",
@@ -238,6 +240,7 @@ export default {
         max-width: 600px;
         min-width: 300px;
         position: relative;
+        height: 100%;
 
 		&__header {
             display: flex;

@@ -1,6 +1,5 @@
 <template>
-    <div>
-        <div class="wrapper" :class="{ 'no-scroll' : modalPageIsOpen }">
+        <div class="wrapper" :class="{ '__no-scroll' : modalPageIsOpen }">
             <header>
                 <topline><p><b>Админ панель</b></p></topline>
             </header>
@@ -225,7 +224,6 @@
                 />
             </div>
         </div>
-    </div>
 </template>
 
 <script>
@@ -436,10 +434,6 @@ export default {
         display: flex;
         flex-direction: column;
         min-height: 100vh;
-        
-        &.no-scroll {
-            overflow: hidden;
-        }
     }
     .content {
         flex: 1 0 100%;
@@ -580,14 +574,17 @@ export default {
     }
 
     .modal-page {
-        padding: 20px;
+        padding: 25px;
         position: absolute;
-        width: 100vw;
-        height: 100vh;
+        top:0;
+        overflow-x: hidden;
+        width: 100%;
+        min-height: 100%;
         background: rgba(44, 62, 80, 0.4);
         display: flex;
         justify-content: center;
         align-items: center;
+
+        z-index: 10;
     }
 </style>
-                   

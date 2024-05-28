@@ -32,6 +32,10 @@ legend { display: block; }
   text-align: left;
   font-size: 18px;
   color: #2c3e50;
+
+  @media(max-width: 992px) {
+    font-size: 15px;
+  }
 }
 
 .container {

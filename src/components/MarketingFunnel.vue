@@ -41,15 +41,19 @@
                     <h3>Списки:</h3>
                     <button @click="downloadXls()">Скачать как xls</button>
                 </div>
-                <list :list="filteredData.registrations">Регистраций</list>
+                <list v-if="filteredData.registrations.length > 0" :list="filteredData.registrations">Регистраций</list>
+                <p v-else>Регистраций: 0</p>
                 <br>
-                <list :list="filteredData.views">Просмотров</list>
+                <list v-if="filteredData.views.length > 0" :list="filteredData.views">Просмотров</list>
+                <p v-else>Просмотров: 0</p>
             </div>
         </div>
     </div>
 </template>
 
 <script>
+
+import * as XLSX from 'xlsx';
 
 import MailsList from "@/components/MailsList.vue"
 
@@ -170,7 +174,25 @@ export default {
         },
 
         downloadXls() {
-            
+            const wb = XLSX.utils.book_new();
+
+            let data = [
+                {
+                    name: "Регистраций",
+                    emails: this.filteredData.registrations
+                },
+                {
+                    name: "Просмотров",
+                    emails: this.filteredData.views
+                }
+            ];
+
+            data.forEach(list => {
+                const ws = XLSX.utils.json_to_sheet(list.emails.map(email => ({ email: email })));
+                XLSX.utils.book_append_sheet(wb, ws, list.name);
+            });
+
+            XLSX.writeFile(wb, 'email_lists.xlsx');
         },
     },
 
@@ -221,6 +243,12 @@ export default {
 		&__email-lists {
             h3 {
                 margin: 0;
+            }
+
+            p {
+                color: #939393;
+                font-weight: 600;
+                padding: 0 0 0 20px;
             }
 		}
 
