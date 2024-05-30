@@ -38,7 +38,7 @@ export default {
                     body: new URLSearchParams({"password" : this.password})
                 })
 
-                if(response.ok) this.$router.push("home")
+                if(response.ok) this.$router.push("/")
             } catch (error) {
                 this.isInvalidPassword = true
             }

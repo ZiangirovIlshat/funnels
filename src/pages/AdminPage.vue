@@ -49,7 +49,7 @@
                                     </button>
                                 </p>
                                 <hr>
-                                <p><a :href="'/' + formData.id" target="_blank">Посмотреть на отображение →</a></p>
+                                <p><a :href="'/new_funnels/' + formData.id" target="_blank">Посмотреть на отображение →</a></p>
                                 <p><b>Последнее изменение:</b> {{formData.date}}</p>
                                 <p>
                                     <label>
@@ -325,13 +325,13 @@ export default {
                 });
 
                 if (!response.ok) {
-                    throw new Error('Network response was not ok');
+                    throw new Error("Не удалось удалить данные о событии");
                 }
 
                 const responseText = await response.json();
 
                 if (responseText.error) {
-                    this.errorMessage = responseText.error;
+                    this.errorMessage = "Не удалось удалить данные о событии";
                     return;
                 }
 
@@ -339,29 +339,28 @@ export default {
                     this.message = responseText.message
                 }
 
-                this.$router.push("admin")
-                this.getData()
-
+                window.location.pathname = "/new_funnels/admin/";
+                this.getData();
             } catch (error) {
-                this.errorMessage = error;
+                this.errorMessage = "Не удалось удалить данные о событии";
             } finally {
                 this.loading = false
             }
         },
 
         async getData() {
+            this.errorMessage = "";
             await this.fetchEventsList();
 
             let eventId = "";
 
-            console.log("da")
-
             if(this.$route.params.id === "") {
                 if(this.eventsList.data.length > 0) {
                     window.location.pathname = "/new_funnels/admin/" + this.eventsList.data[0].id
+
                     eventId = this.eventsList.data[0].id
                 } else {
-                    this.errorMessage = "Не найдено событий"
+                    this.errorMessage = "Не удалось получить данные по событию"
                 }
             } else {
                 eventId = this.$route.params.id
@@ -375,7 +374,7 @@ export default {
                     this.errorMessage = "Не удалось получить данные по событию"
                 }
             } catch (error) {
-                this.errorMessage = error;
+                this.errorMessage = "Не удалось получить данные по событию";
             }
         },
 

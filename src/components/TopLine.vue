@@ -60,11 +60,11 @@ export default {
     },
 
     methods: {
-        exit() {
+        async exit() {
             if (!confirm('Вы уверенны что хотите выйти?')) return
 
-            const response = fetch("https://stat.owen.ru/funnels_api/user/logout");
-            if(response.ok) this.$router.push("home")
+            const response = await fetch("https://stat.owen.ru/funnels_api/user/logout");
+            if(response.ok) this.$router.push("/auth")
         }
     },
 

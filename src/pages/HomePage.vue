@@ -133,6 +133,8 @@ export default {
         },
 
         async getData() {
+            this.errorMessage = ""
+
             await this.fetchEventsList();
 
             let eventId = "";
@@ -143,7 +145,7 @@ export default {
 
                     eventId = this.getVisibleFunnelsData[0].id
                 } else {
-                    this.errorMessage = "Не найдено событий"
+                    this.errorMessage = "Не удалось получить данные"
                 }
             } else {
                 eventId = this.$route.params.id
@@ -151,10 +153,10 @@ export default {
 
             try {
                 await this.fetchFunnelsData(eventId);
-                if(this.funnelsData.data.visible === false) {this.errorMessage = "Не найдено событие"; return;}
+                if(this.funnelsData.data.visible === false) {this.errorMessage = "Не удалось получить данные"; return;}
                 this.sources = Object.keys(this.funnelsData.data.dataSources)
             } catch (error) {
-                this.errorMessage = error;
+                this.errorMessage = "Не удалось получить данные";
             }
         },
     },

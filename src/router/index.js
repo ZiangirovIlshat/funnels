@@ -30,40 +30,40 @@ const router = createRouter({
 })
 
 
-// router.beforeEach(async (to, from, next) => {
-//   if (to.name === "auth") {
-//     next();
-//     return;
-//   }
+router.beforeEach(async (to, from, next) => {
+  if (to.name === "auth") {
+    next();
+    return;
+  }
 
-//   if (to.name === "admin") {
-//     const response = await fetch("https://stat.owen.ru/funnels_api/user/check_admin_auth", {
-//       method: "GET",
-//       credentials: "same-origin"
-//     });
+  if (to.name === "admin") {
+    const response = await fetch("https://stat.owen.ru/funnels_api/user/check_admin_auth", {
+      method: "GET",
+      credentials: "same-origin"
+    });
 
-//     if (response.ok) {
-//       next();
-//     } else {
-//       next({ name: "auth" });
-//     }
-//   }
+    if (response.ok) {
+      next();
+    } else {
+      next({ name: "home" });
+    }
+  }
 
-//   try {
-//     const response = await fetch("https://stat.owen.ru/funnels_api/user/check_auth", {
-//       method: "GET",
-//       credentials: "same-origin"
-//     });
+  try {
+    const response = await fetch("https://stat.owen.ru/funnels_api/user/check_auth", {
+      method: "GET",
+      credentials: "same-origin"
+    });
 
-//     if (response.ok) {
-//       next();
-//     } else {
-//       next({ name: "auth" });
-//     }
-//   } catch (e) {
-//     next({ name: "auth" });
-//   }
-// });
+    if (response.ok) {
+      next();
+    } else {
+      next({ name: "auth" });
+    }
+  } catch (e) {
+    next({ name: "auth" });
+  }
+});
 
 
 export default router

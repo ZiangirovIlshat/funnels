@@ -204,8 +204,8 @@ export default {
                     this.message = responseText.message;
                 }
 
-                this.$emit('create')
-                this.created = true
+                this.$emit("create");
+                this.created = true;
             } catch (error) {
                 this.errorMessage = error
             } finally {
