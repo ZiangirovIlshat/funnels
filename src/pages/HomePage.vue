@@ -35,13 +35,12 @@
                                         >
                                             {{ getName(key) }}
                                         </li>
-                                        <!-- <li
-                                            v-if="sources.length > 1"
+                                        <li
                                             :class="{'__active' : sources.length === activeSlide}"
                                             @click="activeSlide = sources.length"
                                         >
-                                            Статистика
-                                        </li> -->
+                                            Переходы
+                                        </li>
                                     </ul>
                                     <div class="funnels__tab-slider-body">
                                         <div
@@ -56,17 +55,12 @@
                                                 :finalEventType="funnelsData.data.finalEventType"
                                             />
                                         </div>
-                                        <!-- <div
-                                            v-if="sources.length > 1"
+                                        <div
                                             class="funnels__tab-slider-page"
                                             :class="{'__active' : sources.length === activeSlide}"
                                         >
-                                            <generalfunnel
-                                                :sources="sources"
-                                                :data="funnelsData.data.dataSources"
-                                                :finalEventType="funnelsData.data.finalEventType"
-                                            />
-                                        </div> -->
+                                            <statPage/>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -85,14 +79,14 @@ import { mapState, mapActions, mapGetters } from "vuex";
 import TopLine from "@/components/TopLine.vue"
 import SideBar from "@/components/SideBar.vue"
 import MarketingFunnel from "@/components/MarketingFunnel.vue"
-// import StatPage from "@/components/StatPage.vue"
+import StatPage from "@/components/StatPage.vue"
 
 export default {
     components: {
         "topline": TopLine,
         "sidebar": SideBar,
         "funnel": MarketingFunnel,
-        // "generalfunnel": StatPage
+        "statPage": StatPage
     },
 
     data() {

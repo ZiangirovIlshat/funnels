@@ -192,7 +192,7 @@ export default {
                 XLSX.utils.book_append_sheet(wb, ws, list.name);
             });
 
-            XLSX.writeFile(wb, 'email_lists.xlsx');
+            XLSX.writeFile(wb, this.source + '_emails_lists.xlsx');
         },
     },
 

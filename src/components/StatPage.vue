@@ -1,55 +1,6 @@
 <template>
-    <div class="funnel">
-        <div class="funnel__body">
-            <div class="funnel__visualization">
-                <h3>График:</h3>
-                <ul>
-                    <template
-                        v-for="(item, keyI) in funnelData"
-                        :key="item"
-                    >
-                        <li 
-                            v-if="visualizationData[keyI].percent > 0"
-                            :style="{'min-width': visualizationData[keyI].percent + '%'}"
-                        >
-                            <template
-                                v-for="(sourceCount, keyY) in item"
-                                :key="keyY"
-                            >
-                                <span
-                                    :style="{background: colors[keyY], width: (sourceCount / visualizationData[keyI].count * 100) + '%' }"
-                                    v-if="sourceCount > 0"
-                                >
-                                </span>
-                            </template>
-                        </li>
-                    </template>
-                </ul>
-            </div>
-            <br>
-            <div class="funnel__filters" v-if="finalEventType === 'registrationAndViewing'">
-                <h3>Фильтры:</h3>
-                <p>
-                    <label>
-                        Убрать дубли :
-                        <input type="checkbox" @change="getFilteredData()" v-model="filterUniqueValues">
-                    </label>
-                </p>
-                <p>
-                    <label>
-                        Убрать "owen.ru" :
-                        <input type="checkbox" @change="getFilteredData()" v-model="filterOurEmails">
-                    </label>
-                </p>
-            </div>
-            <br>
-            <div class="funnel__email-lists" v-if="finalEventType === 'registrationAndViewing'">
-                <h3>Списки:</h3>
-                <list :list="filteredData.registrations">Регистраций</list>
-                <br>
-                <list :list="filteredData.views">Просмотров</list>
-            </div>
-        </div>
+    <div class="stat-page">
+        <list/>
     </div>
 </template>
 
@@ -83,21 +34,6 @@ export default {
 
     data() {
         return {
-            headings: {
-                "tg" : [
-                    ["Подписчиков", "Показов", "Переходов", "Регистраций", "Просмотров"],
-                    ["Подписчиков", "Показов", "Переходов", "Перешли на сайт организатора"],
-                ],
-                "vk" : [
-                    ["Подписчиков", "Показов", "Переходов", "Регистраций", "Просмотров"],
-                    ["Подписчиков", "Показов", "Переходов", "Перешли на сайт организатора"],
-                ],
-                "email" : [
-                    ["Доставлено", "Прочитано", "Переходов", "Регистраций", "Просмотров"],
-                    ["Доставлено", "Прочитано", "Переходов", "Перешли на сайт организатора"],
-                ],
-            },
-
             colors: {
                 "tg" : "#229ED9",
                 "vk" : "#0077FF",
@@ -115,73 +51,6 @@ export default {
     },
 
     methods: {
-        getFunnels() {
-            let funnelsData = {};
-
-            funnelsData.total = {};
-            funnelsData.read = {};
-            funnelsData.transitions = {};
-            if(this.finalEventType === "registrationAndViewing") {
-                funnelsData.registrations = {};
-                funnelsData.views = {};
-            }
-            if(this.finalEventType === "goOrganizerWebsite") {
-                funnelsData.trafficToOrganizerWebsite = {};
-            }
-
-            for(let key in this.filteredData) {
-                funnelsData.total[key] = this.filteredData[key].total
-                funnelsData.read[key] = this.filteredData[key].read
-                funnelsData.transitions[key] = this.filteredData[key].transitions.length
-
-                if(this.finalEventType === "registrationAndViewing") {
-                    funnelsData.registrations[key] = this.filteredData[key].registrations.length
-                    funnelsData.views[key] = this.filteredData[key].views.length
-                }
-
-                if(this.finalEventType === "goOrganizerWebsite") {
-                    funnelsData.trafficToOrganizerWebsite[key] = this.filteredData[key].trafficToOrganizerWebsite.length
-                }
-            }
-
-            return funnelsData
-        },
-
-        getVisualization() {
-            let globalCounts = {}
-
-            let totalData = this.funnelData.total
-            globalCounts.total = { "count" : totalData.tg + totalData.vk + totalData.email, "percent" : 100 }
-
-            function getRowData(sum) {
-                return {
-                    "count" : sum, 
-                    "percent" : (100 * (sum / globalCounts.total.count)).toFixed(2)
-                }
-            }
-
-            let readData = this.funnelData.read
-            globalCounts.read = getRowData(readData.tg + readData.vk + readData.email)
-
-            let transitionsData = this.funnelData.transitions
-            globalCounts.transitions = getRowData(transitionsData.tg + transitionsData.vk + transitionsData.email)
-
-            if(this.finalEventType === "registrationAndViewing") {
-                let registrationsData = this.funnelData.registrations
-                globalCounts.registrations = getRowData(registrationsData.tg + registrationsData.vk + registrationsData.email)
-                
-                let viewsData = this.funnelData.views
-                globalCounts.views = getRowData(viewsData.tg + viewsData.vk + viewsData.email)
-            }
-
-            if(this.finalEventType === "goOrganizerWebsite") {
-                let trafficData = this.funnelData.trafficToOrganizerWebsite
-                globalCounts.trafficToOrganizerWebsite = getRowData(trafficData.tg + trafficData.vk + trafficData.email)
-            }
-
-            return globalCounts;
-        },
-
         getFilteredData() {
             this.filteredData = JSON.parse(JSON.stringify(this.data))
 
@@ -212,77 +81,15 @@ export default {
     },
 
     created() {
-        this.filteredData = Object.assign({}, this.data);
-        this.funnelData = this.getFunnels()
-        this.visualizationData = this.getVisualization()
+       
     }
 }
 </script>
 
 <style lang="scss" scoped>
-    .funnel {
+    .stat-page {
         padding-left: 50px;
         padding-right: 50px;
-
-		&__body {
-            margin: 50px 0 0 0;
-		}
-
-        h3 {
-            font-size: 20px;
-            font-weight: 600;
-            margin: 0 0 20px 0;
-        }
-
-        &__filters {
-            p {
-                margin: 0 0 10px 0;
-
-                label {
-                    display: inline-flex;
-                    align-items: center;
-                    gap: 10px;
-                }
-
-                input {
-                    width: 18px;
-                    height: 18px;
-                    cursor: pointer;
-                    
-                    &:checked {
-                        background: #008f86;
-                    }
-                }
-            }
-        }
-
-		&__visualization {
-            ul {
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                gap: 12px;
-        
-                li {
-                    border-radius: 5px;
-                    box-shadow: 0 0 5px #939393;
-                    padding: 5px;
-                    display: flex;
-                    gap: 2px;
-                    align-items: center;
-                    justify-content: start;
-                    position: relative;
-
-                    span {
-                        display: block;
-                        border-radius: 5px;
-                        outline: 2px solid #fff;
-                        min-width: 5px;
-                        height: 35px;
-                    }
-                }
-            }
-		}
-}
+    }
 
 </style>

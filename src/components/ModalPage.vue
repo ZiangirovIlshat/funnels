@@ -113,6 +113,12 @@
                         mailing id:
                         <input type="number" v-model="formData.params.externalSources.email">
                     </label>
+                    <label>
+                        mailing id:
+                        <input type="number" v-model="formData.params.externalSources.secondEmail"
+                        >
+                        (повторная рассылка)
+                    </label>
                 </div>
                 <p>
                     <button 

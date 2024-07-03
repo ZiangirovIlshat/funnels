@@ -21,7 +21,7 @@
                 >
                     <ul>
                         <li>
-                        <a href="https://stat.owen.ru/polls" target="_blank">OWEN опросы</a>
+                            <a href="https://stat.owen.ru/polls" target="_blank">OWEN опросы</a>
                         </li>
                         <li>
                             <a href="https://stat.owen.ru/funnels" target="_blank">OWEN маркетинговые <br>воронки (old)</a>

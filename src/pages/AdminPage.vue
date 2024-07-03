@@ -1,5 +1,9 @@
 <template>
-        <div class="wrapper" :class="{ '__no-scroll' : modalPageIsOpen }">
+        <div
+            class="wrapper" 
+            :class="{ '__no-scroll' : modalPageIsOpen }"
+            :style="{ 'max-height' : modalPageIsOpen ? modalPageHeight + 'px' : 'auto' }"
+        >
             <header>
                 <topline><p><b>Админ панель</b></p></topline>
             </header>
@@ -14,7 +18,7 @@
                                 :path="'/admin/'"
                             >
                                 <button class="side-menu__create-btn"
-                                    @click="modalPageIsOpen = !modalPageIsOpen"
+                                    @click="modalPageIsOpen = !modalPageIsOpen, getHeight()"
                                 >
                                     Добавить событие +
                                 </button>
@@ -24,7 +28,7 @@
                             <div class="error" v-if="funnelsParams.error" v-html="funnelsParams.error"></div>
                             <div class="loading" v-else-if="funnelsParams.loading">загрузка...</div>
                             <div class="funnels" v-if="funnelsParams.data">
-                                <div v-if="errorMessage"> 
+                                <div v-if="errorMessage">
                                     <p class="funnels__error-message">{{errorMessage}}</p>
                                 </div>
                                 <div v-if="message">
@@ -211,13 +215,26 @@
                                             >
                                         </label>
                                     </p>
+                                    <p>
+                                        <label>
+                                            mailing id:
+                                            <input
+                                                :class="{
+                                                    '__need-save' :formData.params.externalSources.secondEmail !== funnelsParams.data.params.externalSources.secondEmail
+                                                }"
+                                                type="number"
+                                                v-model="formData.params.externalSources.secondEmail"
+                                            >
+                                            (повторная рассылка)
+                                        </label>
+                                    </p>
                                 </div>
                             </div>
                         </section>
                     </div>
                 </div>
             </main>
-            <div class="modal-page" v-if="modalPageIsOpen">
+            <div class="modal-page" ref="modalPage" v-if="modalPageIsOpen">
                 <modalpage
                     @close="modalPageIsOpen = false"
                     @create="fetchEventsList()"
@@ -266,6 +283,7 @@ export default {
             loading: "",
 
             modalPageIsOpen: false,
+            modalPageHeight: null,
         };
     },
 
@@ -388,6 +406,15 @@ export default {
             }
             return true;
         },
+
+        getHeight() {
+            if(!this.modalPageIsOpen) return
+            console.log(this.modalPageIsOpen)
+
+            setTimeout(() => {
+                this.modalPageHeight = this.$refs.modalPage.scrollHeight
+            }, 200);
+        }
     },
 
     watch: {
@@ -433,6 +460,10 @@ export default {
         display: flex;
         flex-direction: column;
         min-height: 100vh;
+
+        &.__no-scroll {
+            overflow: hidden;
+        }
     }
     .content {
         flex: 1 0 100%;
