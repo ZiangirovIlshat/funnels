@@ -8,7 +8,9 @@
         </div>
         <div class="drop-dawn-list__body" :class="{ '__open' : isOpen }">
             <ul v-show="isOpen">
-                <li v-for="(email, index) in list" :key="email"><b>{{index+1}}) </b> {{email}}</li>
+                <template v-for="(email, index) in list" :key="email">
+                    <li v-if="email"><b>{{index+1}}) </b> {{email}}</li>
+                </template>
             </ul>
         </div>
     </div>

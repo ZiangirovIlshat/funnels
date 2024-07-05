@@ -20,9 +20,9 @@
                             <p class="error" v-if="errorMessage"> {{errorMessage}}</p>
 
                             <div v-else>
-                                <p>Событие: <b>{{funnelsData.data.name}}</b></p>
-                                <p>Описание: <b>{{funnelsData.data.desk}}</b></p>
-                                <p>Ссылка на страницу события: <b><a :href="funnelsData.data.link" target="_blank">{{funnelsData.data.link}}</a></b></p>
+                                <p><b>Событие: </b>{{funnelsData.data.name}}</p>
+                                <p><b>Описание: </b>{{funnelsData.data.desk}}</p>
+                                <p><b>Ссылка на страницу события: </b> <a :href="funnelsData.data.link" target="_blank">{{funnelsData.data.link}}</a></p>
                                 <br>
                                 <h2>Воронки</h2>
                                 <div class="funnels__tab-slider">
@@ -39,7 +39,7 @@
                                             :class="{'__active' : sources.length === activeSlide}"
                                             @click="activeSlide = sources.length"
                                         >
-                                            Переходы
+                                            Статистика
                                         </li>
                                     </ul>
                                     <div class="funnels__tab-slider-body">

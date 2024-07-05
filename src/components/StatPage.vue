@@ -1,6 +1,38 @@
 <template>
     <div class="stat-page">
-        <list/>
+        <div class="stat-page__pie-char-body">
+            <h3>Переходы:</h3>
+        </div>
+
+        <div class="stat-page__pie-char-body">
+            <h3>Регитсрации:</h3>
+        </div>
+
+        <div class="stat-page__pie-char-body">
+            <h3>Просмотры:</h3>
+        </div>
+
+        <h3>
+            Источники:
+        </h3>
+        <ul class="stat-page__sources-list">
+            <li><span :style="{background: colors['tg']}"></span> - Телеграмм</li>
+            <li><span :style="{background: colors['vk']}"></span> - Вконтакте</li>
+            <li><span :style="{background: colors['email']}"></span> - Email</li>
+            <li><span :style="{background: colors['another']}"></span> - Другой</li>
+        </ul>
+
+        <div class="stat-page__lists">
+            <div class="stat-page__lists-header">
+                <h3>Списки:</h3>
+                <button @click="downloadXls()">Скачать как xls</button>
+            </div>
+            <list>Общий список регистраций:</list>
+            <!-- <p>Регистраций: 0</p> -->
+            <br>
+            <list>Общий список просмотров:</list>
+            <!-- <p>Просмотров: 0</p> -->
+        </div>
     </div>
 </template>
 
@@ -15,69 +47,23 @@ export default {
         "list": MailsList,
     },
 
-    props: {
-        sources: {
-            require: true,
-            type: Array,
-        },
-
-        finalEventType: {
-            require: true,
-            type: String,
-        },
-
-        data: {
-            require: true,
-            type: Object,
-        }
-    },
-
     data() {
         return {
             colors: {
                 "tg" : "#229ED9",
                 "vk" : "#0077FF",
                 "email" : "#FF9C24",
+                "another" : "#939393",
             },
 
-            filteredData: [],
-
-            funnelData: null,
-            visualization: null,
-
-            filterUniqueValues: false,
-            filterOurEmails: false,
+            statData: [],
         }
     },
 
     methods: {
-        getFilteredData() {
-            this.filteredData = JSON.parse(JSON.stringify(this.data))
-
-            if(this.filterUniqueValues) this.getUniqueValues()
-            if(this.filterOurEmails) this.removeOurEmails()
-
-            this.funnelData = this.getFunnels()
-        },
-
-        getUniqueValues() {
-            for(let key in this.filteredData) {
-                this.filteredData[key].transitions = removeDuplicates(this.filteredData[key].transitions)
-                this.filteredData[key].registrations = removeDuplicates(this.filteredData[key].registrations)
-                this.filteredData[key].views = removeDuplicates(this.filteredData[key].views)
-            }
-
-            function removeDuplicates(arr) {
-                return arr.filter((item, index) => arr.indexOf(item) === index);
-            }
-        },
-
-        removeOurEmails() {
-            for(let key in this.filteredData) {
-                this.filteredData[key].registrations = this.filteredData[key].registrations.filter((email) => email.slice(-7) !== "owen.ru");
-                this.filteredData[key].views = this.filteredData[key].views.filter((email) => email.slice(-7) !== "owen.ru");
-            }
-        },
+        getData() {
+            
+        }
     },
 
     created() {
@@ -90,6 +76,48 @@ export default {
     .stat-page {
         padding-left: 50px;
         padding-right: 50px;
+
+        h3 {
+            font-size: 20px;
+            font-weight: 600;
+            margin: 0 0 20px 0;
+        }
+
+        &__sources-list {
+            li {
+                line-height: 15px;
+                margin: 0 0 15px 0;
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                span {
+                    display: block;
+                    height: 15px;
+                    width: 50px;
+                    box-shadow: 0 0 2px #939393;
+                }
+            }
+        }
+
+        &__lists {
+            margin: 50px 0 0 0;
+        }
+
+        &__lists-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 0 0 20px 0;
+
+            h3 {
+                margin: 0;
+            }
+
+            button {
+                font-weight: 600;
+                text-decoration: underline;
+            }
+        }
     }
 
 </style>

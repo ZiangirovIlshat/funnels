@@ -267,6 +267,8 @@ export default {
                     externalSources: {
                         // tg: "",
                         // vk: "",
+                        email: 0,
+                        secondEmail: 0,
 
                         // the kostyl
                         tg: { "total": 0, "read": 0, },
@@ -307,8 +309,6 @@ export default {
                     method: "POST",
                     body: JSON.stringify(this.formData)
                 });
-
-                console.log(JSON.stringify(this.formData))
 
                 const responseText = await response.json();
                 

@@ -1,6 +1,9 @@
 <template>
     <div class="funnel">
-        <div class="funnel__body">
+        <div class="funnel__non-data" v-if="!checkData()">
+            Нет данных для отображения
+        </div>
+        <div class="funnel__body" v-else>
             <div class="funnel__visualization">
                 <h3>График:</h3>
                 <ul>
@@ -114,6 +117,13 @@ export default {
     },
 
     methods: {
+        checkData() {
+            for (let key in this.funnelData) {
+                if(this.funnelData[key]["count"] > 0) return true
+            }
+            return false
+        },
+
         addThousandSeparator(num) {
             if(num) return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
             return 0
@@ -207,6 +217,13 @@ export default {
     .funnel {
         padding-left: 50px;
         padding-right: 50px;
+
+        &__non-data {
+            font-size: 20px;
+            text-align: center;
+            margin: 50px 0 0 0;
+            color: #939393;
+        }
 
 		&__body {
             margin: 50px 0 0 0;
