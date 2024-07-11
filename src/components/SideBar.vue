@@ -113,7 +113,7 @@ export default {
                     transition: .3s;
 
                     @media(max-width: 992px) {
-                        font-size: 15px;
+                        font-size: 14px;
                     }
 
                     &::after {

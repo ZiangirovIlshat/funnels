@@ -20,21 +20,25 @@
                             <p class="error" v-if="errorMessage"> {{errorMessage}}</p>
 
                             <div v-else>
+                                <p><b>Последняя дата обнавления: </b>{{getDate(funnelsData.data.date)}}</p>
                                 <p><b>Событие: </b>{{funnelsData.data.name}}</p>
                                 <p><b>Описание: </b>{{funnelsData.data.desk}}</p>
                                 <p><b>Ссылка на страницу события: </b> <a :href="funnelsData.data.link" target="_blank">{{funnelsData.data.link}}</a></p>
                                 <br>
-                                <h2>Воронки</h2>
+                                <h2>Данные по событию</h2>
                                 <div class="funnels__tab-slider">
                                     <ul class="funnels__tab-slider-head">
-                                        <li 
-                                            v-for="(value, key, index) in funnelsData.data.dataSources"
-                                            :key="key"
-                                            :class="{'__active' : index === activeSlide}"
-                                            @click="activeSlide = index"
-                                        >
-                                            {{ getName(key) }}
-                                        </li>
+                                        <template v-for="(value, key, index) in funnelsData.data.dataSources" :key="key">
+                                            <li
+                                                v-if="key !== 'another' && key !== 'site'"
+                                                :key="key"
+                                                :class="{'__active' : index === activeSlide}"
+                                                @click="activeSlide = index"
+                                            >
+                                                {{ getName(key) }}
+                                            </li>
+                                        </template>
+
                                         <li
                                             :class="{'__active' : sources.length === activeSlide}"
                                             @click="activeSlide = sources.length"
@@ -50,6 +54,7 @@
                                             :class="{'__active' : index === activeSlide}"
                                         >
                                             <funnel
+                                                v-if="key !== 'another' && key !== 'site'"
                                                 :source="key"
                                                 :data="funnelsData.data.dataSources[key]"
                                                 :finalEventType="funnelsData.data.finalEventType"
@@ -59,7 +64,7 @@
                                             class="funnels__tab-slider-page"
                                             :class="{'__active' : sources.length === activeSlide}"
                                         >
-                                            <statPage/>
+                                            <statPage :data="funnelsData.data.dataSources"/>
                                         </div>
                                     </div>
                                 </div>
@@ -115,6 +120,15 @@ export default {
             fetchFunnelsData: "funnelsData/fetchFunelsData",
         }),
 
+        getDate(str) {
+            const date = new Date(str);
+
+            const options = { day: 'numeric', month: 'long', year: 'numeric', hour: 'numeric', minute: 'numeric' };
+            const formattedDate = date.toLocaleString('ru-RU', options);
+
+            return formattedDate
+        },
+
         getName(key) {
             switch (key) {
                 case "tg":
@@ -147,7 +161,7 @@ export default {
 
             try {
                 await this.fetchFunnelsData(eventId);
-                if(this.funnelsData.data.visible === false) {this.errorMessage = "Не удалось получить данные"; return;}
+                if(this.funnelsData.data.visible === false) { this.errorMessage = "Не удалось получить данные"; return; }
                 this.sources = Object.keys(this.funnelsData.data.dataSources)
             } catch (error) {
                 this.errorMessage = "Не удалось получить данные";
@@ -192,10 +206,16 @@ export default {
     }
     .side-menu {
         flex: 0 0 25%;
+        @media(max-width: 768px) {
+            flex: 0 0 25%;
+        }
     }
     .body {
         flex: 0 0 75%;
         border-right: 2px solid;
+        @media(max-width: 768px) {
+            flex: 0 0 75%;
+        }
     }
 
     .funnels {

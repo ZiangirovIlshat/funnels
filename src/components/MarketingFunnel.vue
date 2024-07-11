@@ -12,17 +12,20 @@
                         :key="key"
                     >
                         <li
-                            :style="{background: colors[source], width: item.percent + '%'}"
+                            :style="{background: colors[source], width: (item.percent > 2 ? item.percent : 1.5) + '%'}"
                             v-if="item.count > 0"
                         >
-                            <span :class="{'__outside' : item.percent < 25}">
-                                {{key + ': ' + addThousandSeparator(item.count) + ' (' + item.percent + '%)'}}
+                            <span 
+                                :class="{'__outside' : item.percent < 25}">
+                                {{key + ': ' + addThousandSeparator(item.count) + ( Number.isFinite(item.percent) ?  ' (' + item.percent + '%)' : '')}}
                             </span>
                         </li>
                     </template>
                 </ul>
             </div>
+
             <br>
+
             <div class="funnel__filters" v-if="finalEventType === 'registrationAndViewing'">
                 <h3>Фильтры:</h3>
                 <p>
@@ -38,17 +41,19 @@
                     </label>
                 </p>
             </div>
+
             <br>
+
             <div class="funnel__email-lists" v-if="finalEventType === 'registrationAndViewing'">
                 <div class="funnel__lists-header">
                     <h3>Списки:</h3>
                     <button @click="downloadXls()">Скачать как xls</button>
                 </div>
                 <list v-if="filteredData.registrations.length > 0" :list="filteredData.registrations">Регистраций</list>
-                <p v-else>Регистраций: 0</p>
+                <p v-else>Регистрации: 0</p>
                 <br>
                 <list v-if="filteredData.views.length > 0" :list="filteredData.views">Просмотров</list>
-                <p v-else>Просмотров: 0</p>
+                <p v-else>Просмотры: 0</p>
             </div>
         </div>
     </div>
@@ -139,10 +144,10 @@ export default {
             let headings = this.headings[this.source][0];
 
             funnel[headings[0]] = {"percent" : 100 , "count" : this.filteredData.total};
-            funnel[headings[1]] = {"percent" : (100 * (this.filteredData.read / this.filteredData.total)).toFixed(2), "count" : this.filteredData.read};
-            funnel[headings[2]] = {"percent" : (100 * (this.filteredData.transitions.length / this.filteredData.total)).toFixed(2) , "count" : this.filteredData.transitions.length};
-            funnel[headings[3]] = {"percent" : (100 * (this.filteredData.registrations.length / this.filteredData.total)).toFixed(2), "count" : this.filteredData.registrations.length};
-            funnel[headings[4]] = {"percent" : (100 * (this.filteredData.views.length / this.filteredData.total)).toFixed(2), "count" : this.filteredData.views.length};
+            funnel[headings[1]] = {"percent" : (100 * (this.filteredData.read / this.filteredData.total)).toFixed(1), "count" : this.filteredData.read};
+            funnel[headings[2]] = {"percent" : (100 * (this.filteredData.transitions.length / this.filteredData.total)).toFixed(1) , "count" : this.filteredData.transitions.length};
+            funnel[headings[3]] = {"percent" : (100 * (this.filteredData.registrations.length / this.filteredData.total)).toFixed(1), "count" : this.filteredData.registrations.length};
+            funnel[headings[4]] = {"percent" : (100 * (this.filteredData.views.length / this.filteredData.total)).toFixed(1), "count" : this.filteredData.views.length};
 
             return funnel;
         },
@@ -152,9 +157,9 @@ export default {
             let headings = funnel[this.headings[this.source]][1];
 
             funnel[headings[0]] = {"percent" : 100 , "count" : this.filteredData.total};
-            funnel[headings[1]] = {"percent" : (100 * (this.data.read / this.data.total)).toFixed(2), "count" : this.data.read};
-            funnel[headings[2]] = {"percent" : (100 * (this.data.transitions.length / this.data.total)).toFixed(2), "count" : this.data.transitions.length};
-            funnel[headings[3]] = {"percent" : (100 * (this.data.trafficToOrganizerWebsite.length / this.data.total)).toFixed(2), "count" : this.data.trafficToOrganizerWebsite.length};
+            funnel[headings[1]] = {"percent" : (100 * (this.data.read / this.data.total)).toFixed(1), "count" : this.data.read};
+            funnel[headings[2]] = {"percent" : (100 * (this.data.transitions.length / this.data.total)).toFixed(1), "count" : this.data.transitions.length};
+            funnel[headings[3]] = {"percent" : (100 * (this.data.trafficToOrganizerWebsite.length / this.data.total)).toFixed(1), "count" : this.data.trafficToOrganizerWebsite.length};
 
             return funnel;
         },
@@ -306,6 +311,11 @@ export default {
                         color: #fff;
                         white-space: nowrap;
                         padding: 0 20px;
+
+                        @media(max-width: 1430px) {
+                            color: #2c3e50;
+                            text-decoration: underline;
+                        }
 
                         &.__outside {
                             color: #2c3e50;

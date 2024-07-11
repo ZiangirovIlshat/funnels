@@ -51,7 +51,7 @@
                         <input type="text" v-model="formData.link">
                     </label>
                 </p>
-                <p>
+                <!-- <p>
                     <label>
                         <b>Сценарий: </b>
                         <select v-model="formData.finalEventType">
@@ -65,7 +65,7 @@
                         <b>Адрес сайта организатора:</b>
                         <input type="text" v-model="formData.params.organizerWebsiteUrl">
                     </label>
-                </p>
+                </p> -->
                 <hr>
                 <p>Внешние источники:</p>
                 <div>
@@ -161,6 +161,8 @@ export default {
                         },
 
                         email: 0,
+
+                        secondEmail: 0,
                     }
                 },
             },
@@ -192,10 +194,8 @@ export default {
                 return;
             }
 
-            console.log(JSON.stringify(this.formData))
-
             try {
-                const response = await fetch("https://stat.owen.ru/funnels_api/admin/update", {
+                const response = await fetch("http://localhost/funnels_api/admin/update", {
                     method: "POST",
                     body: JSON.stringify(this.formData),
                 });

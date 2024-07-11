@@ -7,7 +7,9 @@
                     <p>OWEN<br>FUNNELS</p>
                     <router-link to="/" title="На главную"></router-link>
                 </div>
+
                 <slot></slot>
+
                 <div
                     class="header__burger-menu" 
                     @click="menuIsOpen = !menuIsOpen"
@@ -15,6 +17,7 @@
                 >
                     <span></span>
                 </div>
+
                 <nav 
                     class="menu" 
                     :class="{'__active' : menuIsOpen}"
@@ -63,14 +66,14 @@ export default {
         async exit() {
             if (!confirm('Вы уверенны что хотите выйти?')) return
 
-            const response = await fetch("https://stat.owen.ru/funnels_api/user/logout");
+            const response = await fetch("http://localhost/funnels_api/user/logout");
             if(response.ok) this.$router.push("/auth")
         }
     },
 
     async created() {
         try {
-            const response = await fetch("https://stat.owen.ru/funnels_api/user/check_admin_auth", {
+            const response = await fetch("http://localhost/funnels_api/user/check_admin_auth", {
               method: "GET",
               credentials: "same-origin"
             });

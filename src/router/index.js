@@ -37,7 +37,7 @@ const router = createRouter({
 //   }
 
 //   if (to.name === "admin") {
-//     const response = await fetch("https://stat.owen.ru/funnels_api/user/check_admin_auth", {
+//     const response = await fetch("http://localhost/funnels_api/user/check_admin_auth", {
 //       method: "GET",
 //       credentials: "same-origin"
 //     });
@@ -50,7 +50,7 @@ const router = createRouter({
 //   }
 
 //   try {
-//     const response = await fetch("https://stat.owen.ru/funnels_api/user/check_auth", {
+//     const response = await fetch("http://localhost/funnels_api/user/check_auth", {
 //       method: "GET",
 //       credentials: "same-origin"
 //     });
