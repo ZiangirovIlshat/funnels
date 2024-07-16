@@ -1,6 +1,6 @@
 <template>
-    <div class="drop-dawn-list" @click="isOpen = !isOpen">
-        <div class="drop-dawn-list__header">
+    <div class="drop-dawn-list">
+        <div class="drop-dawn-list__header" @click="isOpen = !isOpen">
             <div class="drop-dawn-list__heading">
                 <slot></slot>
             </div>

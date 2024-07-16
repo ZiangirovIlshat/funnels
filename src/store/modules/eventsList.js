@@ -41,5 +41,5 @@ const eventsList = {
     },
   }
 }
-  
+
 export default eventsList;

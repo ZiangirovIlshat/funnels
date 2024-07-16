@@ -203,16 +203,16 @@ export default {
         },
 
         getFilteredData() {
-            this.filteredRegistrations = JSON.parse(JSON.stringify(this.registrations))
-            this.filteredviews = JSON.parse(JSON.stringify(this.views))
+            this.filteredRegistrations = JSON.parse(JSON.stringify(this.registrations));
+            this.filteredViews = JSON.parse(JSON.stringify(this.views));
 
-            if(this.filterUniqueValues) this.getUniqueValues()
-            if(this.filterOurEmails) this.removeOurEmails()
+            if (this.filterUniqueValues) this.getUniqueValues();
+            if (this.filterOurEmails) this.removeOurEmails();
         },
 
         getUniqueValues() {
-            this.filteredRegistrations = removeDuplicates(this.filteredRegistrations)
-            this.filteredviews = removeDuplicates(this.filteredviews)
+            this.filteredRegistrations = removeDuplicates(this.filteredRegistrations);
+            this.filteredViews = removeDuplicates(this.filteredViews);
 
             function removeDuplicates(arr) {
                 return arr.filter((item, index) => arr.indexOf(item) === index);
@@ -220,8 +220,13 @@ export default {
         },
 
         removeOurEmails() {
-            this.filteredRegistrations = this.filteredRegistrations.filter((email) => email.slice(-7) !== "owen.ru");
-            this.filteredViews = this.filteredViews.filter((email) => email.slice(-7) !== "owen.ru");
+            const domain = "owen.ru";
+            this.filteredRegistrations = this.filteredRegistrations.filter((email) => getEmailDomain(email) !== domain);
+            this.filteredViews = this.filteredViews.filter((email) => getEmailDomain(email) !== domain);
+
+            function getEmailDomain(email) {
+                return email.slice(email.lastIndexOf('@') + 1);
+            }
         },
 
         downloadXls() {

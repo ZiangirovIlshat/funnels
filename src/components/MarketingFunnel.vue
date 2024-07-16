@@ -17,7 +17,7 @@
                         >
                             <span 
                                 :class="{'__outside' : item.percent < 25}">
-                                {{key + ': ' + addThousandSeparator(item.count) + ( Number.isFinite(item.percent) ?  ' (' + item.percent + '%)' : '')}}
+                                {{key + ': ' + addThousandSeparator(item.count) + ' (' + item.percent + '%)'}}
                             </span>
                         </li>
                     </template>
@@ -210,6 +210,7 @@ export default {
             XLSX.writeFile(wb, this.source + '_emails_lists.xlsx');
         },
     },
+
 
     created() {
         this.filteredData = JSON.parse(JSON.stringify(this.data))
