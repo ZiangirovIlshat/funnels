@@ -195,7 +195,7 @@ export default {
             }
 
             try {
-                const response = await fetch("http://localhost/funnels_api/admin/update", {
+                const response = await fetch("https://stat.owen.ru/funnels_api/admin/update", {
                     method: "POST",
                     body: JSON.stringify(this.formData),
                 });

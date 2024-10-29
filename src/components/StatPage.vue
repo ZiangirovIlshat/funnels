@@ -2,7 +2,7 @@
     <div class="stat-page">
         <div class="stat-page__chars">
             <div class="stat-page__pie-char-body">
-                <h3>Переходы:</h3>
+                <h3>Переходы: <span>{{ getCount(statData.transitions) }}</span></h3>
                 <piechar
                     :charData="statData.transitions"
                     :size="170"
@@ -13,7 +13,7 @@
             </div>
 
             <div class="stat-page__pie-char-body">
-                <h3>Регитсрации:</h3>
+                <h3>Регистрации: <span>{{ getCount(statData.registrations) }}</span></h3>
                 <piechar
                     :charData="statData.registrations"
                     :size="170"
@@ -24,7 +24,7 @@
             </div>
 
             <div class="stat-page__pie-char-body">
-                <h3>Просмотры:</h3>
+                <h3>Просмотры: <span>{{ getCount(statData.views) }}</span></h3>
                 <piechar
                     :charData="statData.views"
                     :size="170"
@@ -73,12 +73,12 @@
         <div class="stat-page__email-lists">
             <div class="stat-page__lists-header">
                 <h3>Списки:</h3>
-                <button @click="downloadXls()">Скачать как xls</button>
+                <button @click="downloadXls()">Скачать xlsx</button>
             </div>
-            <list v-if="filteredRegistrations.length > 0" :list="filteredRegistrations">Общий список регистраций:</list>
+            <list v-if="filteredRegistrations.length > 0" :list="filteredRegistrations">Общий список регистраций : <span>{{ filteredRegistrations.length }}</span></list>
             <p v-else>Регистраций: 0</p>
             <br>
-            <list v-if="filteredViews.length > 0" :list="filteredViews">Общий список просмотров:</list>
+            <list v-if="filteredViews.length > 0" :list="filteredViews">Общий список просмотров : <span>{{ filteredViews.length }}</span></list>
             <p v-else>Просмотров: 0</p>
         </div>
     </div>
@@ -131,56 +131,63 @@ export default {
     },
 
     methods: {
-        prepareData() {
+        getCount(arr) {
+            if(!arr) return 0;
+
+            let count = 0;
+            arr.forEach(element => {
+                count +=  element.number
+            });
+
+            return count
+        },
+
+        prepareStatData() {
             if(!this.data) return
-            this.statData = {}
+
+            this.statData = {
+                "transitions" : [],
+                "registrations" : [],
+                "views" : [],
+            }
+
+            let aliases = {
+                "tg" : "Телеграмм",
+                "vk" : "Вк",
+                "email" : "Email",
+                "site" : "site",
+                "another" : "Другое",
+            };
 
             if(this.data.tg && this.data.vk && this.data.email) {
-                this.statData.transitions = [
-                    { label: 'Телеграмм', number: this.data.tg.transitions.length ?? 0, color: this.colors.tg },
-                    { label: 'Вк', number: this.data.vk.transitions.length ?? 0, color: this.colors.vk },
-                    { label: 'Email', number: this.data.email.transitions.length ?? 0, color: this.colors.email },
-                    { label: 'site', number: this.data.site.transitions.length ?? 0, color: this.colors.site },
-                    { label: 'Другое', number: this.data.another.transitions.length ?? 0, color: this.colors.another },
-                ];
+                for (let key in this.data) {
+                    const element = this.data[key];
+                    
+                    this.statData.transitions.push({
+                        label: aliases[key], number: element.transitions.length ?? 0, color: this.colors[key]
+                    })
 
-                this.statData.registrations = [
-                    { label: 'Телеграмм', number: this.data.tg.registrations.length ?? 0, color: this.colors.tg },
-                    { label: 'Вк', number: this.data.vk.registrations.length ?? 0, color: this.colors.vk },
-                    { label: 'Email', number: this.data.email.registrations.length ?? 0, color: this.colors.email },
-                    { label: 'site', number: this.data.site.registrations.length ?? 0, color: this.colors.site },
-                    { label: 'Другое', number: this.data.another.registrations.length ?? 0, color: this.colors.another },
-                ];
+                    this.statData.registrations.push({
+                        label: aliases[key], number: element.registrations.length ?? 0, color: this.colors[key]
+                    })
 
-                this.statData.views = [
-                    { label: 'Телеграмм', number: this.data.tg.views.length ?? 0, color: this.colors.tg },
-                    { label: 'Вк', number: this.data.vk.views.length ?? 0, color: this.colors.vk },
-                    { label: 'Email', number: this.data.email.views.length ?? 0, color: this.colors.email },
-                    { label: 'site', number: this.data.site.views.length ?? 0, color: this.colors.site },
-                    { label: 'Другое', number: this.data.another.views.length ?? 0, color: this.colors.another },
-                ];
+                    this.statData.views.push({
+                        label: aliases[key], number: element.views.length ?? 0, color: this.colors[key]
+                    })
+                }
             }
         },
 
-        getTotalLists() {
+        getTotalEmailsLists() {
             if(!this.data) return
 
             if(this.data.tg && this.data.vk && this.data.email) {
-                this.registrations =  [
-                    ...this.data.tg.registrations,
-                    ...this.data.vk.registrations,
-                    ...this.data.email.registrations,
-                    ...this.data.site.registrations,
-                    ...this.data.another.registrations
-                ];
+                for (let key in this.data) {
+                    const element = this.data[key];
 
-                this.views = [
-                    ...this.data.tg.views,
-                    ...this.data.vk.views,
-                    ...this.data.email.views,
-                    ...this.data.site.views,
-                    ...this.data.another.views,
-                ];
+                    this.registrations = this.registrations.concat(element.registrations);
+                    this.views = this.views.concat(element.views);
+                }
             }
         },
 
@@ -196,15 +203,15 @@ export default {
             let percent = [];
 
             data.forEach(element => {
-                percent.push( {"label" : element.label , "percent" : ((element.number / sum) * 100).toFixed(2)} )
+                percent.push( {"label" : element.label , "count" : element.number, "percent" : ((element.number / sum) * 100).toFixed(2)} )
             });
 
             return percent;
         },
 
         getFilteredData() {
-            this.filteredRegistrations = JSON.parse(JSON.stringify(this.registrations));
-            this.filteredViews = JSON.parse(JSON.stringify(this.views));
+            this.filteredRegistrations = this.registrations;
+            this.filteredViews = this.views;
 
             if (this.filterUniqueValues) this.getUniqueValues();
             if (this.filterOurEmails) this.removeOurEmails();
@@ -221,6 +228,7 @@ export default {
 
         removeOurEmails() {
             const domain = "owen.ru";
+
             this.filteredRegistrations = this.filteredRegistrations.filter((email) => getEmailDomain(email) !== domain);
             this.filteredViews = this.filteredViews.filter((email) => getEmailDomain(email) !== domain);
 
@@ -253,11 +261,10 @@ export default {
     },
 
     created() {
-        this.prepareData()
-        this.getTotalLists()
+        this.prepareStatData()
+        this.getTotalEmailsLists()
 
-        this.filteredRegistrations = JSON.parse(JSON.stringify(this.registrations))
-        this.filteredViews = JSON.parse(JSON.stringify(this.views))
+        this.getFilteredData()
     }
 } 
 </script>
@@ -293,6 +300,10 @@ export default {
             font-size: 20px;
             font-weight: 600;
             margin: 0 0 20px 0;
+
+            span {
+                color: #939393;
+            }
         }
 
         &__sources-list {

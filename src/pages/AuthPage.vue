@@ -32,7 +32,7 @@ export default {
     methods: {
         async login() {
             try {
-                const response = await fetch("http://localhost/funnels_api/user/login", {
+                const response = await fetch("https://stat.owen.ru/funnels_api/user/login", {
                     method: "POST",
                     credentials: "include",
                     body: new URLSearchParams({"password" : this.password})

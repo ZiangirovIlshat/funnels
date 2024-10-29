@@ -62,11 +62,11 @@
                                 <hr>
 
                                 <p>
-                                    <a :href="'/new_funnels/' + formData.id" target="_blank">Посмотреть на отображение →</a>
+                                    <a :href="'/funnels/' + formData.id" target="_blank">Посмотреть на отображение →</a>
                                 </p>
 
                                 <p>
-                                    <b>Последнее изменение:</b> {{formData.date}}
+                                    <b>Последнее изменение: </b> {{formData.date}}
                                 </p>
 
                                 <p>
@@ -77,7 +77,7 @@
                                 </p>
 
                                 <p>
-                                    <b>id события:</b>
+                                    <b>id события: </b>
                                     <span>
                                         <b>{{formData.id}}</b>
                                     </span>
@@ -343,7 +343,7 @@ export default {
         async saveData() {
             this.loading = true
             try {
-                const response = await fetch("http://localhost/funnels_api/admin/update", {
+                const response = await fetch("https://stat.owen.ru/funnels_api/admin/update", {
                     method: "POST",
                     body: JSON.stringify(this.formData)
                 });
@@ -375,7 +375,7 @@ export default {
             try {
                 let params = new URLSearchParams(); 
                 params.set('id', this.formData.id);
-                let response = await fetch("http://localhost/funnels_api/admin/delete", {
+                let response = await fetch("https://stat.owen.ru/funnels_api/admin/delete", {
                     method: "POST",
                     body: params
                 });
@@ -395,7 +395,7 @@ export default {
                     this.message = responseText.message
                 }
 
-                window.location.pathname = "/new_funnels/admin/";
+                window.location.pathname = "/funnels/admin/";
                 this.getData();
             } catch (error) {
                 this.errorMessage = "Не удалось удалить данные о событии";
@@ -412,7 +412,7 @@ export default {
 
             if(this.$route.params.id === "") {
                 if(this.eventsList.data.length > 0) {
-                    window.location.pathname = "/new_funnels/admin/" + this.eventsList.data[0].id
+                    window.location.pathname = "/funnels/admin/" + this.eventsList.data[0].id
 
                     eventId = this.eventsList.data[0].id
                 } else {

@@ -149,7 +149,7 @@ export default {
 
             if(this.$route.params.id === "") {
                 if(this.getVisibleFunnelsData.length > 0) {
-                    window.location.pathname = "/new_funnels/" + this.getVisibleFunnelsData[0].id
+                    window.location.pathname = "/funnels/" + this.getVisibleFunnelsData[0].id
 
                     eventId = this.getVisibleFunnelsData[0].id
                 } else {

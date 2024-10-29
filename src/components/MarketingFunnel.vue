@@ -47,7 +47,7 @@
             <div class="funnel__email-lists" v-if="finalEventType === 'registrationAndViewing'">
                 <div class="funnel__lists-header">
                     <h3>Списки:</h3>
-                    <button @click="downloadXls()">Скачать как xls</button>
+                    <button @click="downloadXls()">Скачать xlsx</button>
                 </div>
                 <list v-if="filteredData.registrations.length > 0" :list="filteredData.registrations">Регистраций</list>
                 <p v-else>Регистрации: 0</p>
@@ -94,15 +94,15 @@ export default {
             headings: {
                 "tg" : [
                     ["Подписчиков", "Показов", "Переходов", "Регистраций", "Просмотров"],
-                    ["Подписчиков", "Показов", "Переходов", "Перешли на сайт организатора"],
+                    // ["Подписчиков", "Показов", "Переходов", "Перешли на сайт организатора"],
                 ],
                 "vk" : [
                     ["Подписчиков", "Показов", "Переходов", "Регистраций", "Просмотров"],
-                    ["Подписчиков", "Показов", "Переходов", "Перешли на сайт организатора"],
+                    // ["Подписчиков", "Показов", "Переходов", "Перешли на сайт организатора"],
                 ],
                 "email" : [
-                    ["Доставлено", "Прочитано", "Переходов", "Регистраций", "Просмотров"],
-                    ["Доставлено", "Прочитано", "Переходов", "Перешли на сайт организатора"],
+                    ["Отправленно", "Доставлено", "Прочитано", "Переходов", "Регистраций", "Просмотров"],
+                    // ["Доставлено", "Прочитано", "Переходов", "Перешли на сайт организатора"],
                 ],
             },
 
@@ -135,31 +135,28 @@ export default {
         },
 
         getFunnel() {
-            if(this.finalEventType === "registrationAndViewing") return this.getRegistrationAndViewingFunnel()
-            if(this.finalEventType === "goOrganizerWebsite") return this.getGoOrganizerWebsiteFunnel()
-        },
-
-        getRegistrationAndViewingFunnel() {
             let funnel = {};
             let headings = this.headings[this.source][0];
 
-            funnel[headings[0]] = {"percent" : 100 , "count" : this.filteredData.total};
-            funnel[headings[1]] = {"percent" : (100 * (this.filteredData.read / this.filteredData.total)).toFixed(1), "count" : this.filteredData.read};
-            funnel[headings[2]] = {"percent" : (100 * (this.filteredData.transitions.length / this.filteredData.total)).toFixed(1) , "count" : this.filteredData.transitions.length};
-            funnel[headings[3]] = {"percent" : (100 * (this.filteredData.registrations.length / this.filteredData.total)).toFixed(1), "count" : this.filteredData.registrations.length};
-            funnel[headings[4]] = {"percent" : (100 * (this.filteredData.views.length / this.filteredData.total)).toFixed(1), "count" : this.filteredData.views.length};
+            funnel[headings[0]] = {
+                "percent" : 100 , 
+                "count" : this.filteredData.total
+            };
 
-            return funnel;
-        },
+            let index = 1;
 
-        getGoOrganizerWebsiteFunnel() {
-            let funnel = {};
-            let headings = funnel[this.headings[this.source]][1];
+            for (let key in this.filteredData) {
+                const element = this.filteredData[key];
 
-            funnel[headings[0]] = {"percent" : 100 , "count" : this.filteredData.total};
-            funnel[headings[1]] = {"percent" : (100 * (this.data.read / this.data.total)).toFixed(1), "count" : this.data.read};
-            funnel[headings[2]] = {"percent" : (100 * (this.data.transitions.length / this.data.total)).toFixed(1), "count" : this.data.transitions.length};
-            funnel[headings[3]] = {"percent" : (100 * (this.data.trafficToOrganizerWebsite.length / this.data.total)).toFixed(1), "count" : this.data.trafficToOrganizerWebsite.length};
+                if(key === "total") continue;
+
+                funnel[headings[index]] = {
+                    "percent" : (100 * ((Array.isArray(element) ? element.length : element) / this.filteredData.total)).toFixed(1), 
+                    "count" : (Array.isArray(element) ? element.length : element)
+                };
+
+                index++;
+            }
 
             return funnel;
         },

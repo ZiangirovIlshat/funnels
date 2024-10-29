@@ -26,15 +26,20 @@
                         <li>
                             <a href="https://stat.owen.ru/polls" target="_blank">OWEN опросы</a>
                         </li>
+
                         <li>
-                            <a href="https://stat.owen.ru/funnels" target="_blank">OWEN маркетинговые <br>воронки (old)</a>
+                            <a href="https://stat.owen.ru/funnels_old" target="_blank">OWEN маркетинговые <br>воронки (old)</a>
                         </li>
-                        <li v-if="admin">
-                            <router-link to="/admin" target="_blank">Админ панель</router-link>
-                        </li>
-                        <li v-if="$route.name === 'admin'">
-                            <router-link to="/">На главную</router-link>
-                        </li>
+
+                        <template v-if="admin">
+                            <li v-if="$route.name === 'admin'">
+                                <router-link to="/">На главную</router-link>
+                            </li>
+                            <li v-else>
+                                <router-link to="/admin" target="_blank">Админ панель</router-link>
+                            </li>
+                        </template>
+
                         <li>
                             <button
                                 class="header__exit-btn"
@@ -66,14 +71,14 @@ export default {
         async exit() {
             if (!confirm('Вы уверенны что хотите выйти?')) return
 
-            const response = await fetch("http://localhost/funnels_api/user/logout");
+            const response = await fetch("https://stat.owen.ru/funnels_api/user/logout");
             if(response.ok) this.$router.push("/auth")
         }
     },
 
     async created() {
         try {
-            const response = await fetch("http://localhost/funnels_api/user/check_admin_auth", {
+            const response = await fetch("https://stat.owen.ru/funnels_api/user/check_admin_auth", {
               method: "GET",
               credentials: "same-origin"
             });

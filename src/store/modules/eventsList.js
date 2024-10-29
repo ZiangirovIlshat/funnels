@@ -27,7 +27,7 @@ const eventsList = {
     async fetchEventsList({ commit }) {
       commit("SET_EVENTSLIST_LOADING", true);
       try {
-        const response = await fetch("http://localhost/funnels_api/funnels/list");
+        const response = await fetch("https://stat.owen.ru/funnels_api/funnels/list");
         const data = await response.json();
 
         data.sort((a, b) => new Date(b.date) - new Date(a.date));

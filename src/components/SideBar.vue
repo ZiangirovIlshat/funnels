@@ -11,7 +11,7 @@
             <div class="loading" v-else-if="loading">загрузка...</div>
             <div class="sidebar__list" v-else>
                 <div class="sidebar__error" v-if="data.length === 0">
-                    не найдено событий
+                    Не найдено событий
                 </div>
                 <ul v-else>
                     <li v-for="event in data" :key="event.id">

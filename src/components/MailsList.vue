@@ -8,7 +8,7 @@
         </div>
         <div class="drop-dawn-list__body" :class="{ '__open' : isOpen }">
             <ul v-show="isOpen">
-                <template v-for="(email, index) in list" :key="email">
+                <template v-for="(email, index) in list" :key="index">
                     <li v-if="email"><b>{{index+1}}) </b> {{email}}</li>
                 </template>
             </ul>
@@ -93,7 +93,9 @@ export default {
 		}
 
 		&__heading {
-            
+            span {
+                color: #939393;
+            }
 		}
 
 		&__body {
